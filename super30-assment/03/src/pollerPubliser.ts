@@ -46,7 +46,7 @@ ws.on("message", async (msg) => {
   const stuData=await client.xAdd(
     "ticker-data",'*',{
       'timeStamp':data.T,
-      'symbol':data.s,
+      'symbol':data.s,bgvv
       'bestBid':data.b,
       'bestAsk':data.a,
     }
