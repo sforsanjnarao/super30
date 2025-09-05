@@ -45,13 +45,13 @@ ws.on("message", async (msg) => {
   const data=JSON.parse(msg.toString());
   const stuData=await client.xAdd(
     "ticker-data",'*',{
-      'timeStamp':data.T,
-      'symbol':data.s,bgvv
-      'bestBid':data.b,
-      'bestAsk':data.a,
+    'timeStamp': String(data.T),
+    'asset': String(data.s),
+    'bestBid': String(data.b),
+    'bestAsk': String(data.a),
     }
   )
-  console.log(stuData);
+  // console.log(stuData);
 });
 
 ws.on("error", (err) => {

@@ -62,23 +62,19 @@
 // module.exports={signup, signin, emailVerfy}
 
 
-import express from "express";
-import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import { Resend } from "resend";
-import dotenv from "dotenv";
 
-dotenv.config();
+import type { Request, Response } from "express";
 
-const app = express();
-app.use(express.json());
-app.use(cookieParser());
+
+
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // keep safe
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-app.post("/api/v1/auth", async (req, res) => {
+const auth= async (req:Request, res:Response) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ error: "Email required" });
 
@@ -99,28 +95,38 @@ app.post("/api/v1/auth", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Something went wrong" });
   }
-});
+};
 
-app.get("/api/v1/auth/verify", (req, res) => {
+const emailVerfy= (req:Request, res:Response) => {
   const { token } = req.query;
+  if (!token || typeof token !== "string") {
+    return res.status(400).json({ error: "Token is required" });
+  }
   try {
+
     const decoded = jwt.verify(token, JWT_SECRET);
+    if (typeof decoded !== "object" || !decoded.email) {
+      return res.status(400).json({ error: "Invalid token payload" });
+    }
     const session = jwt.sign({ email: decoded.email }, JWT_SECRET);
     res.cookie("token", session)
     res.redirect(`${FRONTEND_URL}/dashboard`);
   } catch (err) {
     return res.status(400).json({ error: "Invalid or expired token" });
   }
-});
-
-app.get("/api/v1/me", (req, res) => {
-  const token = req.cookies.auth;
+};
+const getMe= (req:Request, res:Response) => {
+  const token: string = req.cookies.auth;
   if (!token) return res.status(401).json({ error: "Not logged in" });
 
   try {
+    
     const decoded = jwt.verify(token, JWT_SECRET);
+    if (typeof decoded !== "object" || !decoded.email) {
+      return res.status(400).json({ error: "Invalid token payload" });
+    }
     res.json({ email: decoded.email });
   } catch {
     res.status(401).json({ error: "Invalid session" });
   }
-});
+};
