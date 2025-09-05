@@ -1,0 +1,26 @@
+{
+  "name": "02",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/price.poller.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@types/pg": "^8.15.5",
+    "@types/redis": "^4.0.10",
+    "@types/ws": "^8.18.1",
+    "pg": "^8.16.3",
+    "redis": "^5.8.2",
+    "ws": "^8.18.3"
+  }
+}
