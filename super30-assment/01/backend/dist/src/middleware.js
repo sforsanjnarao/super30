@@ -7,6 +7,9 @@ const isLoggedIn = (req, res, next) => {
             return res.status(400).send("You must be logged in");
         }
         const data = jwt.verify(token, process.env.JWT_PASSWORD);
+        if (!data && typeof data !== "object") {
+            return res.status(401).json({ message: "Invalid token" });
+        }
         req.user = data;
         console.log("Decoded JWT:", data);
         next();

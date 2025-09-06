@@ -30,6 +30,15 @@
 
 import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: string | JwtPayload;
+    }
+  }
+}
 
 const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   try {
