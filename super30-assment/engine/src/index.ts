@@ -3,40 +3,49 @@ import { createClient } from "redis";
 const client = createClient();
 await client.connect();
 
-let lastId = "0"; // or "$" to read only new messages
-type StreamResponse = {
+type StreamMessage = {
+    id: string;
+    message: Record<string, string>;
+  };
+  
+  type StreamResponse = {
     name: string;
-    messages: {
-      id: string;
-      message: Record<string, string>;
-    }[];
-  }[];
-async function consumeTicker() {
-  console.log("Ticker consumer started...");
+    messages: StreamMessage[];
+  };
 
-  while (true) {
-    const res= await client.xRead(
-      [{ key: "ticker-data", id: lastId }],
-      { BLOCK: 0, COUNT: 10 }
-    ) as StreamResponse | null 
-
+let lastId = "0";
+while (1){
+    const res=await client.xRead(
+        [{ key: "ticker-data", id: '$' }],
+        { BLOCK: 0, COUNT: 10 }
+      );
+    //   console.log(res)
+    //   if (res) {
+    //     const streams = res as StreamResponse[]; 
+    //     for (const stream of streams) {
+    //       for (const message of stream.messages) {
+    //         // console.log("Processing trade:", message.message);
+    //         lastId = message.id; // move checkpoint
+    //       }
+    //     }
+    //   }
     if (res) {
-      for (const stream of res) {
-        for (const [id, fields] of stream.messages) {
-          lastId = id;
-
-          const tickerUpdate = Object.fromEntries(
-            Object.entries(fields) // now TS knows fields is iterable
-          );
-
-          console.log("Processing:", tickerUpdate);
-
-          // TODO: pass to your order-matching engine, DB, etc.
-          // e.g. await processTicker(tickerUpdate);
+        for (const stream of res as StreamResponse[]) {
+          for (const message of stream.messages) {
+            console.log("Message ID:", message.id);
+            console.log("Asset:", message.message.asset);
+         
+            console.log("Price:", message.message.price);
+    
+            lastId = message.id; // update checkpoint
+          }
         }
       }
-    }
-  }
+
 }
 
-consumeTicker().catch(console.error);
+//we have some set of data we need to update one Price, open-order and balance
+//with the use we need to sent the user's balance too
+
+//this is what we are processing here
+

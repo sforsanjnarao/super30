@@ -5,7 +5,6 @@ import userRouter from './src/routes/userRoute.js'
 import dotenv from "dotenv";
 import tradeRouter from './src/routes/tradeRoute.js'
 import balanceRouter from './src/routes/balanceRoute.js'
-
 dotenv.config();
 
 

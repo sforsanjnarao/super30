@@ -15,9 +15,7 @@
 //     );
 //     //console.log("Produced:", messageId);
 //     i++;
-//   }, 1000); // every 1s
-// }
-
+//   }, 1000); // ever
 // produce();
 import WebSocket from "ws";
 import {createClient} from 'redis'
@@ -33,8 +31,8 @@ ws.on("open", () => {
   // Send the subscribe message
   const subscribeMsg = {
     method: "SUBSCRIBE",
-    params: ["bookTicker.SOL_USDC_PERP"],
-    id: 2
+    params: ["trade.SOL_USDC"],
+    id: 3
   };
 
   ws.send(JSON.stringify(subscribeMsg));
@@ -42,13 +40,16 @@ ws.on("open", () => {
 
 ws.on("message", async (msg) => {
   // console.log("Received:", msg.toString());
+
   const data=JSON.parse(msg.toString());
+  console.log(data);
   const stuData=await client.xAdd(
     "ticker-data",'*',{
-    'timeStamp': String(data.T),
-    'asset': String(data.s),
-    'bestBid': String(data.b),
-    'bestAsk': String(data.a),
+    // 'timeStamp': String(data.T),
+    // 'asset': String(data.s),
+    // 'bestBid': String(data.b),
+    // 'bestAsk': String(data.a),
+    'price': String(data.p),
     }
   )
   // console.log(stuData);

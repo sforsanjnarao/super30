@@ -12,8 +12,7 @@
 //     );
 //     //console.log("Produced:", messageId);
 //     i++;
-//   }, 1000); // every 1s
-// }
+//   }, 1000); // ever
 // produce();
 import WebSocket from "ws";
 import { createClient } from 'redis';
@@ -34,12 +33,12 @@ ws.on("message", async (msg) => {
     // console.log("Received:", msg.toString());
     const data = JSON.parse(msg.toString());
     const stuData = await client.xAdd("ticker-data", '*', {
-        'timeStamp': data.T,
-        'asset': data.s,
-        'bestBid': data.b,
-        'bestAsk': data.a,
+        'timeStamp': String(data.T),
+        'asset': String(data.s),
+        'bestBid': String(data.b),
+        'bestAsk': String(data.a),
     });
-    console.log(stuData);
+    // console.log(stuData);
 });
 ws.on("error", (err) => {
     console.error("Error:", err);

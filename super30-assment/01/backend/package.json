@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -b",
+    "start": "node ./dist/server.js",
+    "dev": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,7 @@
     "@types/node": "^24.3.1",
     "@types/redis": "^4.0.10",
     "@types/uuid": "^10.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",

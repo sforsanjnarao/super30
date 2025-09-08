@@ -130,3 +130,4 @@ const getMe= (req:Request, res:Response) => {
     res.status(401).json({ error: "Invalid session" });
   }
 };
+export { auth, emailVerfy, getMe };

@@ -110,4 +110,5 @@ const getMe = (req, res) => {
         res.status(401).json({ error: "Invalid session" });
     }
 };
+export { auth, emailVerfy, getMe };
 //# sourceMappingURL=userController.js.map
