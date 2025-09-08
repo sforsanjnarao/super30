@@ -73,6 +73,7 @@ const auth = async (req, res) => {
             console.error("Resend error:", error);
             return res.status(500).json({ error: "Failed to send email" });
         }
+        res.cookie("auth", token);
         res.status(200).json({ message: "Check your email for the login link", data: data, token: token });
     }
     catch (err) {
@@ -80,7 +81,7 @@ const auth = async (req, res) => {
         res.status(500).json({ error: "Something went wrong" });
     }
 };
-const emailVerfy = (req, res) => {
+const emailVerify = (req, res) => {
     const { token } = req.query;
     if (!token || typeof token !== "string") {
         return res.status(400).json({ error: "Token is required" });
@@ -92,7 +93,8 @@ const emailVerfy = (req, res) => {
         }
         const session = jwt.sign({ email: decoded.email }, JWT_SECRET);
         res.cookie("token", session);
-        res.redirect(`${FRONTEND_URL}/dashboard`);
+        // res.redirect(`${FRONTEND_URL}/dashboard`);
+        res.status(200).json({ message: "Email verified", email: decoded.email, token: session });
     }
     catch (err) {
         return res.status(400).json({ error: "Invalid or expired token" });
@@ -113,5 +115,5 @@ const getMe = (req, res) => {
         res.status(401).json({ error: "Invalid session" });
     }
 };
-export { auth, emailVerfy, getMe };
+export { auth, emailVerify, getMe };
 //# sourceMappingURL=userController.js.map

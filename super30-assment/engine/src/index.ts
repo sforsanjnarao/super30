@@ -24,10 +24,11 @@ while (1){
         for (const stream of res as StreamResponse[]) {
           for (const message of stream.messages) {
 
-            console.log("Message ID:", message.id);
-            console.log("Asset:", message.message.asset);
+            // console.log("Message ID:", message.id);
+            // console.log("Asset:", message.message.asset);
          
-            console.log("Price:", message.message.price);
+            // console.log("Price:", message.message.price);
+            console.log(message.message)
     
             lastId = message.id; // update checkpoint
           }

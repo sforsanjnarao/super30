@@ -47,7 +47,7 @@ const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
       return res.status(400).send("You must be logged in");
     }
 
-    const data = jwt.verify(token, process.env.JWT_PASSWORD!) as jwt.JwtPayload;
+    const data = jwt.verify(token, process.env.JWT_PASSWORD! || 'supersecret') as jwt.JwtPayload;
     if (!data && typeof data !== "object" ) {
       return res.status(401).json({ message: "Invalid token" });
     }

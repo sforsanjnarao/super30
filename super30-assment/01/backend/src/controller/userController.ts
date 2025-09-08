@@ -113,7 +113,8 @@ const emailVerify= (req:Request, res:Response) => {
     }
     const session = jwt.sign({ email: decoded.email }, JWT_SECRET);
     res.cookie("token", session)
-    res.redirect(`${FRONTEND_URL}/dashboard`);
+    // res.redirect(`${FRONTEND_URL}/dashboard`);
+    res.status(200).json({ message: "Email verified", email: decoded.email, token: session });
   } catch (err) {
     return res.status(400).json({ error: "Invalid or expired token" });
   }

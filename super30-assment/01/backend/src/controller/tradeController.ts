@@ -9,9 +9,9 @@ await client.connect();
 const createTrade= async (req: Request, res:Response) => {
     //adding data to the redis stream
     try {
-        const { asset, type, margin, leverage, slippage } = req.body;
+        const { asset, type, margin, leverage, slippage, qty } = req.body;
 
-        if (!asset || !type || !margin || !leverage || !slippage) {
+        if (!asset || !type || !margin || !leverage || !slippage || !qty) {
             return res.status(400).json({ error: 'Missing fields' });
         }
 
@@ -22,6 +22,7 @@ const createTrade= async (req: Request, res:Response) => {
         const messageId = await client.xAdd('ticker-data', '*', {
             id,
             asset,
+            qty: qty.toString(),
             type,
             margin: margin.toString(),
             leverage: leverage.toString(),
