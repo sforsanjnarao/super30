@@ -72,7 +72,7 @@ import type { Request, Response } from "express";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // keep safe
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || 're_wHe2ziaT_CiNoYRtWPZZv3GXTqccy9xzg');
 
 const auth= async (req:Request, res:Response) => {
   const { email } = req.body;
@@ -82,22 +82,25 @@ const auth= async (req:Request, res:Response) => {
   const link = `http://localhost:3000/api/v1/auth/verify?token=${token}`;
 
   try {
-      
-; 
        const {data, error}=await resend.emails.send({
-        from: "login@yourdomain.com",
+        from: "onboarding@resend.dev",
         to: email,
         subject: "Your Magic Login Link",
         html: `<p>Click to log in:</p><a href="${link}">sign in</a>`,
     })
-    res.status(200).json({ message: "Check your email for the login link" });
+    if (error || data == null) {
+      console.error("Resend error:", error);
+      return res.status(500).json({ error: "Failed to send email" });
+    }
+    res.cookie("auth", token)
+    res.status(200).json({ message: "Check your email for the login link" ,data:data, token:token});
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Something went wrong" });
   }
 };
 
-const emailVerfy= (req:Request, res:Response) => {
+const emailVerify= (req:Request, res:Response) => {
   const { token } = req.query;
   if (!token || typeof token !== "string") {
     return res.status(400).json({ error: "Token is required" });
@@ -130,4 +133,4 @@ const getMe= (req:Request, res:Response) => {
     res.status(401).json({ error: "Invalid session" });
   }
 };
-export { auth, emailVerfy, getMe };
+export { auth, emailVerify, getMe };

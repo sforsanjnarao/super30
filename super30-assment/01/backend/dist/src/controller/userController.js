@@ -55,7 +55,7 @@ import jwt from "jsonwebtoken";
 import { Resend } from "resend";
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret"; // keep safe
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || 're_wHe2ziaT_CiNoYRtWPZZv3GXTqccy9xzg');
 const auth = async (req, res) => {
     const { email } = req.body;
     if (!email)
@@ -63,14 +63,17 @@ const auth = async (req, res) => {
     const token = jwt.sign({ email }, JWT_SECRET);
     const link = `http://localhost:3000/api/v1/auth/verify?token=${token}`;
     try {
-        ;
         const { data, error } = await resend.emails.send({
-            from: "login@yourdomain.com",
+            from: "onboarding@resend.dev",
             to: email,
             subject: "Your Magic Login Link",
             html: `<p>Click to log in:</p><a href="${link}">sign in</a>`,
         });
-        res.status(200).json({ message: "Check your email for the login link" });
+        if (error || data == null) {
+            console.error("Resend error:", error);
+            return res.status(500).json({ error: "Failed to send email" });
+        }
+        res.status(200).json({ message: "Check your email for the login link", data: data, token: token });
     }
     catch (err) {
         console.error(err);

@@ -19,19 +19,11 @@ while (1){
         [{ key: "ticker-data", id: '$' }],
         { BLOCK: 0, COUNT: 10 }
       );
-    //   console.log(res)
-    //   if (res) {
-    //     const streams = res as StreamResponse[]; 
-    //     for (const stream of streams) {
-    //       for (const message of stream.messages) {
-    //         // console.log("Processing trade:", message.message);
-    //         lastId = message.id; // move checkpoint
-    //       }
-    //     }
-    //   }
+    
     if (res) {
         for (const stream of res as StreamResponse[]) {
           for (const message of stream.messages) {
+
             console.log("Message ID:", message.id);
             console.log("Asset:", message.message.asset);
          

@@ -13,11 +13,11 @@ app.use(express.json())
 app.use(cookieParser());
 
 
-app.use('/api/vi',userRouter)
-app.use('/api/vi/trade',tradeRouter)
-app.use('/api/vi/balance',balanceRouter)
+app.use('/api/v1',userRouter)
+app.use('/api/v1/trade',tradeRouter)
+app.use('/api/v1/balance',balanceRouter)
 
 
-app.listen(3000,()=>{
+app.listen(3001,()=>{
     console.log(`server is running on port ${process.env.PORT}`)
 })

@@ -42,17 +42,16 @@ ws.on("message", async (msg) => {
   // console.log("Received:", msg.toString());
 
   const data=JSON.parse(msg.toString());
-  console.log(data);
+  const trade = data.data;
+  // console.log(data);
   const stuData=await client.xAdd(
     "ticker-data",'*',{
-    // 'timeStamp': String(data.T),
-    // 'asset': String(data.s),
-    // 'bestBid': String(data.b),
-    // 'bestAsk': String(data.a),
-    'price': String(data.p),
+    'asset': String(trade.s),
+    
+    'price': trade.p,
     }
   )
-  // console.log(stuData);
+  console.log('asset: ',trade.s,' Price:',trade.p);
 });
 
 ws.on("error", (err) => {
