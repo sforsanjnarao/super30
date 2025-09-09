@@ -1,6 +1,6 @@
 import {WebSocket} from 'ws';
 import {createClient} from 'redis'
-import {Pool} from 'pg'
+import {Pool} from '../node_modules/@types/pg/index.js'
 
 // const dataBase=new Pool({
 
