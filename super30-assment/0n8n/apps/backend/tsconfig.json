@@ -11,6 +11,8 @@
     "module": "nodenext",
     "target": "esnext",
     "types": [],
+    "noEmit":true,
+    "allowImportingTsExtensions": true,
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
@@ -20,7 +22,6 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
-
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
