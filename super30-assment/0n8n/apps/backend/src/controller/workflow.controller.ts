@@ -8,11 +8,14 @@ export const workflowController=  async (req:Request, res:Response) => {
         return res.status(400).send({ message: "Missing required fields" });
     }
 
-    const createWebFlow= await prisma.WorkflowEntity.create({
+    const createWebFlow= await prisma.workflowEntity.create({
         data:{
-            name,
-            nodes,
-            connections
+            name: "Test workflow",
+            active: true,
+            nodes: [],
+            connections: [],
+            settings: "",
+            staticData: "",
         }
     })
     console.log(createWebFlow)
@@ -20,9 +23,12 @@ export const workflowController=  async (req:Request, res:Response) => {
 }
 export const workflowIDController=async (req:Request, res:Response) => {
     const { id } = req.params;
-    const allWorkFlows= await prisma.WorkflowEntity.findUnique({
+    if (!id) {
+        return res.status(400).json({ message: 'Workflow ID is required' });
+      }
+    const allWorkFlows= await prisma.workflowEntity.findUnique({
         where:{
-            id:id
+            id:id,
         }
     })
     if (!allWorkFlows) {
