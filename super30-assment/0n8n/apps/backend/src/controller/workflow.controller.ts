@@ -3,19 +3,19 @@ import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.ts';
 
 export const workflowController=  async (req:Request, res:Response) => {
-    const { name, nodes, connections } = req.body;
+    const { name, nodes, connections, active,settings, staticData } = req.body;
     if (!name || !nodes || !connections) {
         return res.status(400).send({ message: "Missing required fields" });
     }
 
     const createWebFlow= await prisma.workflowEntity.create({
         data:{
-            name: "Test workflow",
-            active: true,
-            nodes: [],
-            connections: [],
-            settings: "",
-            staticData: "",
+            name: name,
+            active: active,
+            nodes: nodes,
+            connections: connections,
+            settings: settings,
+            staticData: staticData,
         }
     })
     console.log(createWebFlow)
@@ -36,5 +36,5 @@ export const workflowIDController=async (req:Request, res:Response) => {
     }
     console.log(allWorkFlows)
     await prisma.$disconnect()
-    res.send({ message: "Workflow Id created" });
+    res.send({ message: "Workflow Id created" , allWorkFlows});
 }
