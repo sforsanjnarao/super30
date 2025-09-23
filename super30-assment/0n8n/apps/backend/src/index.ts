@@ -1,7 +1,8 @@
 import express from "express"
 import dotenv from "dotenv"
-import WorkflowRouter from "./router/workflow.router.ts"
-import UserRouter from "./router/user.router.ts"
+import WorkflowRouter from "./router/workflow.route.ts"
+import UserRouter from "./router/user.route.ts"
+import Webhook from "./router/webhook.route.ts"
 import cookieParser from "cookie-parser"
 
 
@@ -14,6 +15,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use('/api/v0',WorkflowRouter)
 app.use('/api/v0/user',UserRouter)
+app.use('/api/v0/webhook',Webhook)
 
 
 

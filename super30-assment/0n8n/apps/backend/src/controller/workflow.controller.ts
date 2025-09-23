@@ -2,6 +2,8 @@
 import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.ts';
 import type {WorkflowEntity, Prisma} from '@prisma/client'
+import { nanoid } from 'nanoid';
+
 
 
 
@@ -40,4 +42,20 @@ export const workflowIDController=async (req:Request, res:Response) => {
     console.log(allWorkFlows)
     await prisma.$disconnect()
     res.send({ message: "Workflow Id created" , allWorkFlows});
+}
+export const ActivateWorkflow =async (req:Request,res:Response)=>{
+    const {id} = req.params
+    const webhookId= nanoid(10) 
+    const updateWorkflow= await prisma.workflowEntity.update({
+        where:{
+            id:id
+        },data:{
+            active:true,
+            webhookId:webhookId
+        } 
+    })
+    const webhookUrl=`${process.env.LOCAL_SERVER}/webhook/handler/${webhookId}`
+    res.status(201).send({message:"successfully make a url",updateWorkflow, webhookUrl})
+
+    res.send({message:"activate workflow"})
 }
