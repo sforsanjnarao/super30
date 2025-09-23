@@ -33,7 +33,7 @@ model WorkflowEntity{
     authorEmail    String  
     webhookId      String @unique
     active        Boolean @default(false)
-    nodes         Json
+    nodes         Json[]
     connections   Json
     settings      String
     staticData    String

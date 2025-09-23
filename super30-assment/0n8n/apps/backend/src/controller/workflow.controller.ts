@@ -44,16 +44,20 @@ export const workflowIDController=async (req:Request, res:Response) => {
     res.send({ message: "Workflow Id created" , allWorkFlows});
 }
 export const ActivateWorkflow =async (req:Request,res:Response)=>{
-    const {id} = req.params
-    const webhookId= nanoid(10) 
-    const updateWorkflow= await prisma.workflowEntity.update({
-        where:{
-            id:id
-        },data:{
-            active:true,
-            webhookId:webhookId
-        } 
-    })
+    const { id } = req.params;
+    if (!id) {
+        return res.status(400).json({ message: "Workflow ID is required" });
+    }
+    const webhookId = nanoid(10);
+    const updateWorkflow = await prisma.workflowEntity.update({
+        where: {
+            id: id
+        },
+        data: {
+            active: true,
+            webhookId: webhookId
+        }
+    });
     const webhookUrl=`${process.env.LOCAL_SERVER}/webhook/handler/${webhookId}`
     res.status(201).send({message:"successfully make a url",updateWorkflow, webhookUrl})
 
