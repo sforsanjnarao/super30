@@ -27,10 +27,11 @@ export const signup= async (req:Request, res:Response)=>{
     const token= jwt.sign({id:savingUserDataInDB.id}, process.env.JWT_PASS as string)
     //saving in cookie
     res.cookie('token',token)
-    
+
   res.json({savingUserDataInDB})
 };
 
 export const signin=async (req:Request, res:Response)=>{
-     res.send("signin")
+    const {email,password}=req.body
+    
 }

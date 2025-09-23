@@ -7,6 +7,6 @@ export const protect=async (req:Request,res:Response)=>{
     if(!token) return res.status(401).json({message:'no token found'})
 
     const decode= await jwt.verify(token, process.env.JWT_PASS as string)
-    
+    res.status(201).json({message:'accessed',User:decode},)
 
 }
