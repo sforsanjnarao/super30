@@ -46,5 +46,4 @@ model WorkflowEntity{
 //   name   String? 
 //   data   Json
 //   type   String
-
 // }
