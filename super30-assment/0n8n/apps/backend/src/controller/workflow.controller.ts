@@ -1,6 +1,14 @@
 
 import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.ts';
+interface Workflow {
+    name:string;
+    active:boolean;
+    nodes:object[];   //this means array of objects
+    connections:object   //this means object
+    settings?: string;
+    staticData?: string;
+}
 
 export const workflowController=  async (req:Request, res:Response) => {
     const { name, nodes, connections, active,settings, staticData } = req.body;
