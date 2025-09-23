@@ -31,7 +31,7 @@ model WorkflowEntity{
     
     author        User    @relation(fields: [authorEmail],references: [email])
     authorEmail    String  
-
+    webhookId      String @unique
     active        Boolean @default(false)
     nodes         Json
     connections   Json
