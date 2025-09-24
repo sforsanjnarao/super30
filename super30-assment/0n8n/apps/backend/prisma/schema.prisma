@@ -21,6 +21,7 @@ model User{
   userName      String?
   //one to many relation
   Workflows WorkflowEntity[] 
+  Credentials CredentialsEntity[]
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,8 +30,8 @@ model WorkflowEntity{
     id            String   @id @default(auto()) @map("_id") @db.ObjectId
     name          String  @unique
     
-    author        User    @relation(fields: [authorEmail],references: [email])
-    authorEmail    String  
+    author        User    @relation(fields: [authorId],references: [id])
+    authorId    String   @db.ObjectId
     webhookId      String @unique
     active        Boolean @default(false)
     nodes         Json[]
@@ -41,9 +42,13 @@ model WorkflowEntity{
 }
 
 
-// model CredentialsEntity{
-//   id     String @id @default(auto()) @map("_id") @db.ObjectId
-//   name   String? 
-//   data   Json
-//   type   String
-// }
+model CredentialsEntity{
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String? 
+
+  author        User    @relation(fields: [authorId],references: [id])
+  authorId    String   @db.ObjectId
+  
+  data   Json
+  type   String
+}
