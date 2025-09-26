@@ -5,7 +5,7 @@ const connection=new Connection("https://api.mainet-beta.solana.com", "confirmed
 
 const senderkeypair= Keypair.generate()
 //or
-
+const senderPrivateKey= 
 
 
 const sender=new PublicKey(process.argv[1])
@@ -23,5 +23,5 @@ transaction.add(sendSolInstrection)
 
 
 const signature= sendAndConfirmTransaction(connection, transaction,[
-
+    senderPrivateKey
 ])
