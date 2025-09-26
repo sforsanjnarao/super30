@@ -1,15 +1,18 @@
 "use client"
 import { Card } from '@/components/ui/card'
-import React from 'react'
-import  { ReactFlow, Background, Controls, MiniMap,type Node, type Edge} from "@xyflow/react"
+import React, { useState, useCallback }  from 'react'
+import  { ReactFlow, Background, Controls, MiniMap,type Node, type Edge, addEdge, Connection, OnNodesChange, OnEdgesChange, OnConnect} from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
+import {  applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
+import TextUpdaterNode from './nodes/TextUpdaterNode'
 
-const nodes:Node[]=[
+const initialNodes:Node[]=[
     {
         id: "1",
         data:{
             label: "Node 1"
         },
+        type:"textUpdater",
         position:{x:50,y:50}
     },
     {
@@ -28,28 +31,49 @@ const nodes:Node[]=[
     }
 ]
 
-const edges: Edge[]=[
+const initialEdges: Edge[]=[
     {
         id:"1-2",
         source:"1", 
-        target:"2"
+        target:"2",
+        type:"step",
+        label:"connect with"
     },
-    {
-        id:"2-3",
-        source:"2",
-        target:"3",
-        animated:true
-    }
+    // {
+    //     id:"2-3",
+    //     source:"2",
+    //     target:"3",
+    //     animated:true
+    // }
 ]
 
+const nodeTypes={
+    textUpdater: TextUpdaterNode
+}
+
 const envroment = () => {
+    const [nodes, setNodes] = useState<Node[]>(initialNodes)
+    const [edges, setEdges]=useState<Edge[]>(initialEdges)
+
+
+    const onNodeChange: OnNodesChange=useCallback((changes)=>setNodes((nodeSnapshot)=>applyNodeChanges(changes,nodeSnapshot)),[setNodes])
+    const onEdgeChange: OnEdgesChange=useCallback((changes)=>setEdges((edgeSnapshot)=>applyEdgeChanges(changes,edgeSnapshot)),[setEdges])
+
+
+    const onConnect: OnConnect=useCallback((params:Connection)=>setEdges((edgeSnapshot)=>addEdge(params,edgeSnapshot)),[])
+
   return (
     <Card className="h-[500px] w-[700px] p-2 ">
       <div className="h-full w-full rounded-md overflow-hidden">
         <ReactFlow
           nodes={nodes}
           edges={edges}
+          onNodesChange={onNodeChange}
+          onEdgesChange={onEdgeChange}
+          onConnect={onConnect}
+          nodeTypes={nodeTypes}
           fitView
+          panOnScroll
           
         >
           <Background 
