@@ -5,15 +5,13 @@ import  { ReactFlow, Background, Controls, MiniMap,type Node, type Edge, addEdge
 import "@xyflow/react/dist/style.css"
 import {  applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
 import TextUpdaterNode, { CustomEdge } from './nodes/TextUpdaterNode'
+import TelegramNode from './nodes/TelegramNode'
 
 const initialNodes:Node[]=[
     {
         id: "1",
-        data:{
-            label: "Node 1"
-        },
-        sourcePosition:"bottom", 
-        type:"custom-edge",
+        data: {label:'Telegram bot', botName: 'MyTelegramBot', action: 'Send Message', message: 'Hello from React Flow!' },
+        type:"telegram-bot",
         position:{x:50,y:50}
     },
     {
@@ -53,8 +51,12 @@ const initialEdges: Edge[]=[
 const edgeTypes = {
     'custom-edge': CustomEdge,
   };
-const nodeTypes={
-    textUpdater: TextUpdaterNode
+ const nodeTypes={
+    textUpdater: TextUpdaterNode,
+    telegramNode: TelegramNode
+ }
+const telegramNodeType={
+    
 }
 
 const envroment = () => {
@@ -79,8 +81,8 @@ const envroment = () => {
           onConnect={onConnect}
           nodeTypes={nodeTypes}
           fitView
-          panOnScroll
           edgeTypes={edgeTypes}
+          panOnScroll
           colorMode='dark'
           
         >
@@ -94,7 +96,6 @@ const envroment = () => {
             className="!bg-white !border !border-gray-300 !rounded-md shadow-md"
             style={{ color: "#2563eb" }} // Tailwind blue-600
             />
-          {/* <MiniMap /> */}
         
         </ReactFlow>
       </div>

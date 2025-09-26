@@ -5,10 +5,8 @@ import Envroment from './_component/Envroment'
   
 const page = () => {
   return (
-    <div className='h-screen w-screen'>
-        <div className='mx-auto my-auto'>
+    <div className="h-screen w-screen flex items-center justify-center">
             <Envroment/>
-        </div>
     </div>
   )
 }
