@@ -4,7 +4,7 @@ import React, { useState, useCallback }  from 'react'
 import  { ReactFlow, Background, Controls, MiniMap,type Node, type Edge, addEdge, Connection, OnNodesChange, OnEdgesChange, OnConnect} from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import {  applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
-import TextUpdaterNode from './nodes/TextUpdaterNode'
+import TextUpdaterNode, { CustomEdge } from './nodes/TextUpdaterNode'
 
 const initialNodes:Node[]=[
     {
@@ -12,7 +12,8 @@ const initialNodes:Node[]=[
         data:{
             label: "Node 1"
         },
-        type:"textUpdater",
+        sourcePosition:"bottom", 
+        type:"custom-edge",
         position:{x:50,y:50}
     },
     {
@@ -20,6 +21,8 @@ const initialNodes:Node[]=[
         data:{
             label:"Node 2"
         },
+        targetPosition: 'bottom',
+
         position:{x:100,y:100}
     },
     {
@@ -37,7 +40,8 @@ const initialEdges: Edge[]=[
         source:"1", 
         target:"2",
         type:"step",
-        label:"connect with"
+        label:"connect with",
+        sourceHandle:'a'
     },
     // {
     //     id:"2-3",
@@ -46,7 +50,9 @@ const initialEdges: Edge[]=[
     //     animated:true
     // }
 ]
-
+const edgeTypes = {
+    'custom-edge': CustomEdge,
+  };
 const nodeTypes={
     textUpdater: TextUpdaterNode
 }
@@ -74,6 +80,8 @@ const envroment = () => {
           nodeTypes={nodeTypes}
           fitView
           panOnScroll
+          edgeTypes={edgeTypes}
+          colorMode='dark'
           
         >
           <Background 
