@@ -1,5 +1,7 @@
 import { Router } from "express";
 const router=Router()
 
-router.post('/credential')
-router.get('/credential')
+router.post('/')
+router.get('/')
+
+export default router
