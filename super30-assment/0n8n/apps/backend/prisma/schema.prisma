@@ -32,7 +32,7 @@ model Workflow{
     
     author        User      @relation(fields: [authorId],references: [id])
     authorId      String    @db.ObjectId
-    webhookId     String?   @unique
+    webhookUrl     String?   @unique   //basically a url or we can it webhookUrl
     active        Boolean   @default(false)
     nodes         Json[]
     connections   Json[]

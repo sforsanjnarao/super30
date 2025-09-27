@@ -55,7 +55,7 @@ export const ActivateWorkflow =async (req:Request,res:Response)=>{
         },
         data: {
             active: true,
-            webhookId: webhookId
+            webhookUrl: webhookId
         }
     });
     const webhookUrl=`${process.env.LOCAL_SERVER}/webhook/handler/${webhookId}`

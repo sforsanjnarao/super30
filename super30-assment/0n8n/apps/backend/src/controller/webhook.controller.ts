@@ -7,7 +7,7 @@ export const WorkflowExecution = async (req:Request, res:Response)=>{
     const workflow=await prisma.workflow.findFirst({
         where:{
             active:true,
-            webhookId:id
+            webhookUrl:id
         } as Prisma.WorkflowWhereInput
     })
     if(!workflow) return res.json({message:'no active workflow'})
