@@ -13,7 +13,7 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-//i am connection user to workflow and credintials with one to many relationship with email not id
+//i am connection user to workflow and Credentials with one to many relationship with email not id
 model User{
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String   @unique

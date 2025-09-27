@@ -2,7 +2,12 @@ import React,{useCallback, useState} from 'react';
 import { Handle, Position } from '@xyflow/react'; 
 import axios from 'axios';
 
-const TelegramNode = ({ data, id }: {data:any, id: String}) => {
+interface TelegramNodeType{
+ data:any;
+ id: string
+}
+
+const TelegramNode = ({ data, id }: TelegramNodeType) => {
     // const {botName, action, message, }=data
     const [chatId, setChatId] = useState(data.chatId || '');
     const [message, setMessage] = useState(data.message || '');
@@ -31,7 +36,7 @@ const TelegramNode = ({ data, id }: {data:any, id: String}) => {
         .then(()=>{
             console.log('data is rocking in the backend')
         }).catch((err)=>{
-            console.log('under the circumtances of backend is still begging WE HAVE AN ERROR: ',err)
+            console.log('under the circumstances of backend is still begging WE HAVE AN ERROR: ',err)
         })
 
     }

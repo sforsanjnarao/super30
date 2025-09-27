@@ -1,7 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { Handle, Position } from '@xyflow/react'; 
 import { Button } from '@/components/ui/button';
-const GmailNode = ({ data, id }:any) => {
+
+
+interface GmailNodeProps {
+    data: Record<string,undefined>;
+    id:string
+}
+const GmailNode = ({ data, id }:GmailNodeProps) => {
  const [recipient, setRecipient] = useState(data.recipient || '');
  const [subject, setSubject] = useState(data.subject || '');
  const [message, setMessage] = useState(data.message || ''); 
@@ -32,7 +38,7 @@ const GmailNode = ({ data, id }:any) => {
     .then(()=>{
         console.log('data is rocking in the backend')
     }).catch((err)=>{
-        console.log('under the circumtances of backend is still begging WE HAVE AN ERROR: ',err)
+        console.log('under the circumstances of backend is still begging WE HAVE AN ERROR: ',err)
     })
 
 }

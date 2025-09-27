@@ -1,7 +1,7 @@
 "use client"
 import { Card } from '@/components/ui/card'
 import React, { useState, useCallback }  from 'react'
-import  { ReactFlow, Background, Controls, MiniMap,type Node, type Edge, addEdge, Connection, OnNodesChange, OnEdgesChange, OnConnect} from "@xyflow/react"
+import  { ReactFlow, Background, Controls,type Node, type Edge, addEdge, Connection, OnNodesChange, OnEdgesChange, OnConnect} from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import {  applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
 import TelegramNode from './nodes/TelegramNode'
@@ -46,7 +46,7 @@ const initialEdges: Edge[]=[]
 
 
 
-const envroment = () => {
+const Environment = () => {
     const [nodes, setNodes] = useState<Node[]>(initialNodes)
     const [edges, setEdges]=useState<Edge[]>(initialEdges)
 
@@ -95,4 +95,4 @@ const envroment = () => {
   )
 }
 
-export default envroment
+export default Environment

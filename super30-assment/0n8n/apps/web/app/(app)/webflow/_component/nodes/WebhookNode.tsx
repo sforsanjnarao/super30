@@ -1,7 +1,11 @@
 import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 
-const WebhookNode = ({ data }:any) => {
+interface WebhookNodeType{
+    data: any
+}
+
+const WebhookNode = ({ data }:WebhookNodeType) => {
   const webhookUrl = data.url || 'https://yourapi.com/webhook/unique-id-from-db';
 
   const onCopy = () => {

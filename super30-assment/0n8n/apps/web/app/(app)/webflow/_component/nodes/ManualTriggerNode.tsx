@@ -1,7 +1,11 @@
 import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 
-const ManualTriggerNode = ({ data }:{data:unknown}) => {
+
+interface ManualTriggerType {
+    data:undefined
+}
+const ManualTriggerNode = ({ data }:ManualTriggerType) => {
   const onTrigger = () => {
     console.log('Workflow triggered manually!');
     // Example: axios.post(`/api/workflow/${data.workflowId}/trigger`, { someData: 'hello' });
@@ -16,7 +20,7 @@ const ManualTriggerNode = ({ data }:{data:unknown}) => {
       </div>
       
       <p className="text-xs text-gray-400">
-        Click the button to run this workflow.
+        Click the button to run this workflow.{data}
       </p>
 
       
