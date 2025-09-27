@@ -21,7 +21,7 @@ model User{
   userName      String?
   //one to many relation
   Workflows Workflow[] 
-  Credentials CredentialsEntity[]
+  Credentials Credentials[]
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -45,7 +45,7 @@ model Workflow{
 }
 
 
-model CredentialsEntity{
+model Credentials{
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   name   String? 
 
