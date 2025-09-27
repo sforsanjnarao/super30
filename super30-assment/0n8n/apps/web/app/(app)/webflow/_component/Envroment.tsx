@@ -6,23 +6,34 @@ import "@xyflow/react/dist/style.css"
 import {  applyEdgeChanges, applyNodeChanges } from '@xyflow/react';
 import TelegramNode from './nodes/TelegramNode'
 import GmailNode from './nodes/GmailNode'
+import WebhookNode from './nodes/WebhookNode'
+import ManualTriggerNode from './nodes/ManualTriggerNode'
 
 
 const nodeTypes={
     telegramNode: TelegramNode,
-    gmailNode:GmailNode
+    gmailNode:GmailNode,
+    webhookNode: WebhookNode,
+    manualTriggerNode: ManualTriggerNode
+
 }
 
 const initialNodes:Node[]=[
     {
         id: "1",
+        type: 'webhook',
+        position: { x: 50, y: 150 },
+        data: { url: 'https://yourapi.com/webhook/xyz123' } // This would come from your DB
+    },
+    {
+        id: "2",
         data: {label:'Telegram bot', botName: 'MyTelegramBot', action: 'Send Message', message: 'Hello from React Flow!' },
         type:"telegramNode",
         position:{x:50,y:50}
     },
    
     {
-        id:"2",
+        id:"3",
         position:{x:200,y:200},
         type:"gmailNode",
         data: { recipient: 'example@gmail.com', subject: 'React Flow Test' }

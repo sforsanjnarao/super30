@@ -6,7 +6,7 @@ export default {
     "./components/**/*.{ts,tsx}",
     "./store/**/*.{ts,tsx}",
     "./lib/**/*.{ts,tsx}",
-    "../../packages/ui/src/**/*.{ts,tsx}" // 👈 add shared ui package
+    "../../packages/ui/src/**/*.{ts,tsx}", // 👈 add shared ui package
   ],
   theme: {
   	extend: {

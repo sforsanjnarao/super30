@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Handle, Position } from '@xyflow/react'; 
 import { Button } from '@/components/ui/button';
-const GmailNode = ({ data, id }) => {
+const GmailNode = ({ data, id }:any) => {
  const [recipient, setRecipient] = useState(data.recipient || '');
  const [subject, setSubject] = useState(data.subject || '');
  const [message, setMessage] = useState(data.message || ''); 
@@ -16,12 +16,12 @@ const GmailNode = ({ data, id }) => {
      setSubject(evt.target.value);
  }, []); 
 
- const onMessageChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
+ const onMessageChange = useCallback((evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(evt.target.value);
  }, []); 
 
 
- const onSubmitHandler=async (e)=>{
+ const onSubmitHandler=async (e: React.FormEvent<HTMLFormElement>)=>{
     e.preventDefault() 
     const data={
         recipient: recipient,

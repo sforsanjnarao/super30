@@ -2,7 +2,7 @@ import React,{useCallback, useState} from 'react';
 import { Handle, Position } from '@xyflow/react'; 
 import axios from 'axios';
 
-const TelegramNode = ({ data, id }) => {
+const TelegramNode = ({ data, id }: {data:any, id: String}) => {
     // const {botName, action, message, }=data
     const [chatId, setChatId] = useState(data.chatId || '');
     const [message, setMessage] = useState(data.message || '');
@@ -13,7 +13,7 @@ const TelegramNode = ({ data, id }) => {
         setChatId(evt.target.value);
       }, []);
     
-      const onMessageChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
+      const onMessageChange = useCallback((evt: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(evt.target.value);
       }, []);
 
@@ -21,7 +21,7 @@ const TelegramNode = ({ data, id }) => {
     //     setFormData(e.target.value)
     //   })
 
-    const onSubmitHandler=async (e)=>{
+    const onSubmitHandler=async (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault() 
         const data={
             chat: chatId,
