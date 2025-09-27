@@ -20,7 +20,7 @@ const ManualTriggerNode = ({ data }:ManualTriggerType) => {
       </div>
       
       <p className="text-xs text-gray-400">
-        Click the button to run this workflow.{data}
+        Click the button to run this workflow.
       </p>
 
       

@@ -5,6 +5,8 @@ interface WebhookNodeType{
     data: any
 }
 
+
+
 const WebhookNode = ({ data }:WebhookNodeType) => {
   const webhookUrl = data.url || 'https://yourapi.com/webhook/unique-id-from-db';
 

@@ -62,7 +62,7 @@ export const ActivateWorkflow =async (req:Request,res:Response)=>{
     res.status(201).send({message:"successfully make a url",updateWorkflow, webhookUrl})
 
     res.send({message:"activate workflow"})
-}
+} //this is for webhook trigger
 
 export const startButtonForManualTrigger= async (req:Request,res:Response)=>{
     res.send({message:"this is the start button for the manual trigger"})
