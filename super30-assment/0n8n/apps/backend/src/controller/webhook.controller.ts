@@ -1,18 +1,18 @@
 import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.ts';
-import type { Prisma, WorkflowEntity } from '@prisma/client';
+import type { Prisma, Workflow } from '@prisma/client';
 
 export const WorkflowExecution = async (req:Request, res:Response)=>{
     const {id}=req.params
-    const workflow=await prisma.workflowEntity.findFirst({
+    const workflow=await prisma.workflow.findFirst({
         where:{
             active:true,
             webhookId:id
-        } as Prisma.WorkflowEntityWhereInput
+        } as Prisma.WorkflowWhereInput
     })
     if(!workflow) return res.json({message:'no active workflow'})
 
-    const {nodes, connections} = workflow as WorkflowEntity
+    const {nodes, connections} = workflow as Workflow
     const firstNode=nodes[0]
     const executionResult={
         node:firstNode,

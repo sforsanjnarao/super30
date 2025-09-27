@@ -1,7 +1,7 @@
 
 import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.ts';
-import type {WorkflowEntity, Prisma} from '@prisma/client'
+import type {Workflow, Prisma} from '@prisma/client'
 import { nanoid } from 'nanoid';
 
 
@@ -13,7 +13,7 @@ export const workflowController=  async (req:Request, res:Response) => {
         return res.status(400).send({ message: "Missing required fields" });
     }
 
-    const createWebFlow:WorkflowEntity = await prisma.workflowEntity.create({
+    const createWebFlow:Workflow = await prisma.workflow.create({
         data:{
             name: name,
             active: active,
@@ -21,7 +21,7 @@ export const workflowController=  async (req:Request, res:Response) => {
             connections: connections,
             settings: settings,
             staticData: staticData,
-        } as Prisma.WorkflowEntityCreateInput
+        } as Prisma.WorkflowCreateInput
     })
     console.log(createWebFlow)
     res.status(201).json({ message: "Workflow created successfully" , createWebFlow});
@@ -31,7 +31,7 @@ export const workflowIDController=async (req:Request, res:Response) => {
     if (!id) {
         return res.status(400).json({ message: 'Workflow ID is required' });
       }
-    const allWorkFlows= await prisma.workflowEntity.findUnique({
+    const allWorkFlows= await prisma.workflow.findUnique({
         where:{
             id:id,
         }
@@ -49,7 +49,7 @@ export const ActivateWorkflow =async (req:Request,res:Response)=>{
         return res.status(400).json({ message: "Workflow ID is required" });
     }
     const webhookId = nanoid(10);
-    const updateWorkflow = await prisma.workflowEntity.update({
+    const updateWorkflow = await prisma.workflow.update({
         where: {
             id: id
         },
@@ -63,3 +63,8 @@ export const ActivateWorkflow =async (req:Request,res:Response)=>{
 
     res.send({message:"activate workflow"})
 }
+
+export const startButtonForManualTrigger= async (req:Request,res:Response)=>{
+    res.send({message:"this is the start button for the manual trigger"})
+}
+

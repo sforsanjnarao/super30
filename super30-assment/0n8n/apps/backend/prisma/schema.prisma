@@ -13,32 +13,35 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-//i am connection user to workflow with one to many relationship with email not id
+//i am connection user to workflow and credintials with one to many relationship with email not id
 model User{
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   email     String   @unique
   password  String
   userName      String?
   //one to many relation
-  Workflows WorkflowEntity[] 
+  Workflows Workflow[] 
   Credentials CredentialsEntity[]
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-model WorkflowEntity{
+model Workflow{
     id            String   @id @default(auto()) @map("_id") @db.ObjectId
     name          String  @unique
     
-    author        User    @relation(fields: [authorId],references: [id])
-    authorId    String   @db.ObjectId
-    webhookId      String @unique
-    active        Boolean @default(false)
+    author        User      @relation(fields: [authorId],references: [id])
+    authorId      String    @db.ObjectId
+    webhookId     String?   @unique
+    active        Boolean   @default(false)
     nodes         Json[]
-    connections   Json
+    connections   Json[]
     settings      String
     staticData    String
-    TriggerCount  String  @default("0")
+    TriggerCount  Int  @default(0)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
 }
 
 
@@ -48,7 +51,8 @@ model CredentialsEntity{
 
   author        User    @relation(fields: [authorId],references: [id])
   authorId    String   @db.ObjectId
-  
   data   Json
   type   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
