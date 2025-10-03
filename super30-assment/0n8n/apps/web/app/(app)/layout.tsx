@@ -1,8 +1,13 @@
 import React from 'react'
 
-const layout = ({children}) => {
+interface LayoutType{
+  children: React.ReactNode
+}
+
+const layout = ({children}: LayoutType) => {
   return (
     <div>
+      <div>lalla</div>
         {children}
     </div>
   )

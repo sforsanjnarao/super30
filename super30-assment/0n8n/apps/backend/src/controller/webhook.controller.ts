@@ -14,6 +14,7 @@ export const WorkflowExecution = async (req:Request, res:Response)=>{
 
     const {nodes, connections} = workflow as Workflow
     const firstNode=nodes[0]
+
     const executionResult={
         node:firstNode,
         input:{
@@ -21,7 +22,9 @@ export const WorkflowExecution = async (req:Request, res:Response)=>{
             headers: req.headers,
             query: req.query,
         }
+        
     }
+
     res.json({
         message: "Workflow executed",
         workflowId: workflow.id,
