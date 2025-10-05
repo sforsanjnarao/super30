@@ -2,8 +2,6 @@ import { ThemeProvider } from "@/components/theme-provider"
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { DashboardHeader } from "./_component/header";
-import { MainNav } from "./_component/main-nav";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,11 +32,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
 
-          <div className="theme-dark p-8">
-            <DashboardHeader />
-            <MainNav />
-            <main className="mt-8">{children}</main>
-          </div>
+        <div className="theme-dark p-8">
+          <main className="mt-8">{children}</main>
+        </div>
 
       </ThemeProvider>
 
