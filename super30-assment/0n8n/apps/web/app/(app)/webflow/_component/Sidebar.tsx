@@ -18,7 +18,6 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 
-// --- Define your available nodes here ---
 const availableNodes = [
     { value: 'triggerManual', label: 'Trigger manually' },
     { value: 'onAppEvent', label: 'On app event' },
@@ -26,10 +25,8 @@ const availableNodes = [
     { value: 'webhookNode', label: 'On webhook call' },
     { value: 'onFormSubmission', label: 'On form submission' },
     { value: 'telegramNode', label: 'Telegram Bot' },
-    // Add any other nodes you have
 ];
 
-// --- The drag event handler ---
 const onDragStart = (event: React.DragEvent, nodeType: string, nodeLabel: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.setData('application/reactflow-label', nodeLabel); // Optional: pass label
@@ -65,7 +62,6 @@ export function Sidebar() {
                                         key={node.value}
                                         value={node.label}
                                         className="cursor-grab"
-                                        // --- Attach the drag handler here ---
                                         onDragStart={(event) => onDragStart(event, node.value, node.label)}
                                         draggable
                                     >

@@ -55,12 +55,13 @@ const initialNodes:Node[]=[
 const initialEdges: Edge[] = [];
 
 
-const FlowCanvas = () => {
+const FlowCanvas = ({workflowId}:{workflowId: string})=> {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const { screenToFlowPosition } = useReactFlow(); 
     const [nodes, setNodes] = useState<Node[]>(initialNodes);
     const [edges, setEdges] = useState<Edge[]>(initialEdges);
     const [isWorkflowActive, setIsWorkflowActive] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const onNodeChange: OnNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -78,7 +79,7 @@ const FlowCanvas = () => {
     );
 
     const handleSave = async () => {
-        const data = { nodes, connections: edges };
+        const data = { nodes, connections: edges,  };
         try {
             await axios.post("/api/v0/workflows", data);
             console.log('Workflow saved successfully');
@@ -86,6 +87,11 @@ const FlowCanvas = () => {
             console.error('Error saving workflow:', err);
         }
     };
+    const handleStatusChange=async (checked:boolean)=>{
+      setIsWorkflowActive(checked)
+      setLoading(true)
+      await axios.put(`api/v0/${workflowId}/activated`)
+    }
 
     // --- Drag and Drop Logic ---
     const onDragOver = useCallback((event: React.DragEvent) => {
@@ -145,7 +151,7 @@ const FlowCanvas = () => {
                             <Switch
                                 id="workflow-status"
                                 checked={isWorkflowActive}
-                                onCheckedChange={setIsWorkflowActive}
+                                onCheckedChange={handleStatusChange}
                             />
                         </div>
                         <Button onClick={handleSave}>Save</Button>
@@ -157,19 +163,19 @@ const FlowCanvas = () => {
 };
 
 
-const Environment = () => {
+
+const Environment = ({workflowId}:{workflowId: string}) => {
     return (
         <div className="flex h-screen w-screen bg-gray-900 text-white">
             <ReactFlowProvider>
                 <Sidebar />
-                <FlowCanvas />
+                <FlowCanvas workflowId={workflowId} />
             </ReactFlowProvider>
         </div>
     );
 };
 
 export default Environment;
-
 
 
 
