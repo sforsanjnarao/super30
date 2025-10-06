@@ -6,11 +6,11 @@ import Environment from "../_component/Environment";
 
 const Page = () => {
   const params = useParams();
-  const id = params.id as string; // get the dynamic route param
+  const id = params.id as string; 
 
   return (
     <div className="h-screen w-screen">
-      <Environment workflowId={id} /> {/* pass it as a prop */}
+      <Environment workflowId={id} />
     </div>
   );
 };

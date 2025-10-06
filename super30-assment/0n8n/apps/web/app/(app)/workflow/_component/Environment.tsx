@@ -113,7 +113,7 @@ const FlowCanvas = ({workflowId}:{workflowId: string})=> {
         });
 
         const newNode: Node = {
-            id: `dnd-node-${Math.random()}`, // Use a more robust ID generator in production
+            id: `dnd-node-${Math.random()}`, 
             type,
             position,
             data: { label: `${type} node` },
