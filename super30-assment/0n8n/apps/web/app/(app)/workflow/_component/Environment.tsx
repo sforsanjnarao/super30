@@ -79,9 +79,9 @@ const FlowCanvas = ({workflowId}:{workflowId: string})=> {
     );
 
     const handleSave = async () => {
-        const data = { nodes, connections: edges,  };
+        const data = { nodes, connections: edges  };
         try {
-            await axios.post("/api/v0/workflows", data);
+            await axios.post("http://localhost:8080/api/v0/workflows", data);
             console.log('Workflow saved successfully');
         } catch (err) {
             console.error('Error saving workflow:', err);
@@ -90,15 +90,13 @@ const FlowCanvas = ({workflowId}:{workflowId: string})=> {
     const handleStatusChange=async (checked:boolean)=>{
       setIsWorkflowActive(checked)
       setLoading(true)
-      await axios.put(`api/v0/${workflowId}/activated`)
+      await axios.put(`http://localhost:8080/api/v0/${workflowId}/activated`)
     }
 
-    // --- Drag and Drop Logic ---
     const onDragOver = useCallback((event: React.DragEvent) => {
         event.preventDefault();
         event.dataTransfer.dropEffect = 'move';
     }, []);
-
     const onDrop = useCallback((event: React.DragEvent) => {
         event.preventDefault();
         const type = event.dataTransfer.getData('application/reactflow');

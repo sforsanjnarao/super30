@@ -1,9 +1,11 @@
 import Router, { type Request, type Response } from "express";
-import {  ActivateWorkflow, startButtonForManualTrigger, workflowController, workflowIDController } from "../controller/workflow.controller.ts";
+import {  ActivateWorkflow, startButtonForManualTrigger, workflowController, workflowIDController,getAllWorkflowsController,updateWorkflowController } from "../controller/workflow.controller.ts";
 import { protect } from "../middleware/routesProtect.ts";
 const router = Router();
-router.post("/workflows",protect, workflowController)
+router.post("/workflows", workflowController)
+router.get("/workflows", getAllWorkflowsController);
 router.get("/workflows/:id",protect, workflowIDController)
+router.patch('/workflows/:id',updateWorkflowController)
 router.put("/:id/activated",protect,ActivateWorkflow )
 
 

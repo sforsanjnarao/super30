@@ -63,6 +63,14 @@ export const ActivateWorkflow =async (req:Request,res:Response)=>{
 
     res.send({message:"activate workflow"}) // when some message comes it gonna hig thi 
 } 
+export const getAllWorkflowsController= async(req:Request,res:Response)=>{
+        const allWorkflow= await prisma.workflow.findMany();
+        res.status(200).json({message: 'got the all workflows', workflow: allWorkflow})
+}
+
+export const updateWorkflowController= async(req:Request,res:Response)=>{
+    res.status(200).json({message: 'database got the new data'})
+}
 
 export const startButtonForManualTrigger= async (req:Request,res:Response)=>{
     res.send({message:"this is the start button for the manual trigger"})

@@ -5,12 +5,17 @@ import UserRouter from "./router/user.route.ts"
 import Webhook from "./router/webhook.route.ts"
 import Credential from "./router/credential.route.ts"
 import cookieParser from "cookie-parser"
+import cors from 'cors'
+
 
 
 dotenv.config()
 const PORT = process.env.PORT || 8080
 const app = express()
 
+app.use(cors({origin:'*',
+    credentials:true
+}))
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
