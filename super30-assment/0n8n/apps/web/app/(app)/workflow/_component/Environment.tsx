@@ -21,10 +21,10 @@ import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Sidebar } from './Sidebar'; // This will contain our combobox
+import { Sidebar } from './Sidebar';
 import TelegramNode from './nodes/TelegramNode';
 import WebhookNode from './nodes/WebhookNode';
-import {Prisma} from '@prisma/client'
+// import {Prisma} from '@prisma/client'
 
 const nodeTypes={
   telegramNode: TelegramNode,
