@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import {
     ReactFlow,
     Background,
@@ -24,6 +24,7 @@ import { Label } from "@/components/ui/label";
 import { Sidebar } from './Sidebar'; // This will contain our combobox
 import TelegramNode from './nodes/TelegramNode';
 import WebhookNode from './nodes/WebhookNode';
+import {Prisma} from '@prisma/client'
 
 const nodeTypes={
   telegramNode: TelegramNode,
@@ -63,6 +64,37 @@ const FlowCanvas = ({workflowId}:{workflowId: string})=> {
     const [isWorkflowActive, setIsWorkflowActive] = useState(true);
     const [loading, setLoading] = useState(false);
 
+
+
+    interface Workflow {
+        id: string;
+        name: string;
+        authorId: string;
+        webhookUrl: string | null;
+        active: boolean;
+        nodes: Node[];
+        connections: Edge[];
+        createdAt: string;
+        updatedAt: string;
+      }
+
+    useEffect(() => {
+        const fetchWorkflow = async () => {
+            try {
+                const response = await axios.get<Workflow>(`/api/v0/workflows/${workflowId}`);
+                console.log(response.data)
+                const { nodes, connections, active } = response.data;
+                setNodes(nodes || []);
+                setEdges(connections || []);
+                setIsWorkflowActive(active);
+            } catch (error) {
+                console.error('Error fetching workflow:', error);
+            }
+        };
+        fetchWorkflow();
+    }, [workflowId]);
+
+
     const onNodeChange: OnNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
         [setNodes]
@@ -81,7 +113,7 @@ const FlowCanvas = ({workflowId}:{workflowId: string})=> {
     const handleSave = async () => {
         const data = { nodes, connections: edges  };
         try {
-            await axios.post("http://localhost:8080/api/v0/workflows", data);
+            await axios.patch(`http://localhost:8080/api/v0/workflows/${workflowId}`, data);
             console.log('Workflow saved successfully');
         } catch (err) {
             console.error('Error saving workflow:', err);
@@ -90,7 +122,7 @@ const FlowCanvas = ({workflowId}:{workflowId: string})=> {
     const handleStatusChange=async (checked:boolean)=>{
       setIsWorkflowActive(checked)
       setLoading(true)
-      await axios.put(`http://localhost:8080/api/v0/${workflowId}/activated`)
+      await axios.put(`http://localhost:8080/api/v0/${workflowId}/activated`,{active: checked})
     }
 
     const onDragOver = useCallback((event: React.DragEvent) => {
