@@ -6,7 +6,7 @@ import { WorkflowExecution } from "../controller/webhook.controller.ts";
 const router = Router();
 
 
-router.post("/handler/:webhookId",protect, WorkflowExecution) //this is straightly getting from the database the node, connection
+router.post("/handler/:webhookId",protect, WorkflowExecution) //this is straightly getting from the database the node,
 
 
 

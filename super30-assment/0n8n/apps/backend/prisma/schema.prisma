@@ -36,8 +36,8 @@ model Workflow{
     active        Boolean   @default(false)
     nodes         Json[]
     connections   Json[]
-    settings      String
-    staticData    String
+    // settings      String
+    // staticData    String
     TriggerCount  Int  @default(0)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
