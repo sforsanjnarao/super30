@@ -87,7 +87,7 @@ The frontend uses Next.js with the App Router to create a secure and efficient u
 
 The file `lib/api.ts` creates a pre-configured Axios instance. This is the cornerstone of frontend-to-backend communication.
 
-```typescript
+typescript
 // lib/api.ts
 import axios from "axios";
 
@@ -151,7 +151,7 @@ This is handled by the `(dashboard)/layout.tsx` file, a **React Server Component
 
 The following environment variables are required for the authentication system to function:
 
-```bash
+bash
 # .env
 
 # Used by Prisma to connect to the database
