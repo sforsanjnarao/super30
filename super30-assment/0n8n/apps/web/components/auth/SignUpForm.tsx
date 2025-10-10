@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TSignUpSchema, signUpSchema } from "../../lib/validators";
 import { Button } from "@/components/ui/button";
+import api from "@lib/api";
 import {
   Form,
   FormControl,
@@ -31,7 +32,7 @@ export function SignUpForm() {
   });
 
   const onSubmit = async (data: TSignUpSchema) => {
-    const response = await axios.post("http://localhost:8080/api/v0/user/signup", {
+    const response = await api.post("/user/signup", {
       body: JSON.stringify(data),
     });
 

@@ -2,12 +2,13 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import api from "@lib/api";
 
 export default function SignOutButton() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    const response = await axios.post("http://localhost:8080/api/v0/user/signout", {
+    const response = await api.post("/user/signout", {
     });
 
     if (response.status==200) {

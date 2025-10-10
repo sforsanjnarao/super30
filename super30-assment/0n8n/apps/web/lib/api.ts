@@ -1,4 +1,4 @@
-// // /lib/api.ts
+// // /lib/api.ts 
 // import axios, { AxiosInstance } from "axios";
 
 // const api: AxiosInstance = axios.create({
@@ -16,7 +16,6 @@
 // export default api;
 
 
-// lib/api.ts
 import axios from "axios";
 
 const api = axios.create({

@@ -16,10 +16,7 @@ const app = express()
 app.use(cors({origin:'*',
     credentials:true
 }))
-// app.use(cors({
-//     origin: 'http://localhost:3000', // your frontend
-//     credentials: true                // allow cookies to be sent/received
-//   }));
+
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))

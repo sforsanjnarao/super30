@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import {useRouter} from 'next/router'
+import api from '@lib/api'
 
 const LoginPage = () => {
   const router= useRouter()
@@ -11,7 +12,7 @@ const LoginPage = () => {
   type Event= React.FormEvent<HTMLFormElement>
   const handelFormSubmit= async (e:Event)=>{
       e.preventDefault();
-      const res= await axios.post("http://localhost:8080/api/v0/user/signin",{email:email, password: password},{
+      const res= await api.post("/user/signin",{email:email, password: password},{
         
       })
       setEmail('')

@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
 import SignOutButton from "@/components/auth/SignOutButton";
+import api from "@lib/api";
 
 interface User {
   id: string;
@@ -16,8 +17,7 @@ async function getUser(): Promise<User | null> {
     
     if (!token) return null;
     try {
-        const response = await axios.get<User>(
-          "http://localhost:8080/api/v0/user/me",
+        const response = await api.get<User>( "/user/me",
           {
             headers: {
               Cookie: `token=${token}`,
@@ -48,18 +48,3 @@ async function getUser(): Promise<User | null> {
   );
 }
 
-
-// async function getUser(){
-//     const token= (await cookies()).get("token")?.value;
-//     if(!token) return null;
-
-//     const response= await axios.get<User>("http://localhost:8080/api/v0/user/me",{
-//         headers:{
-//             Cookie: `token=${token}`
-//         },
-//         cache: 'no-store'
-//     });
-//     if(!response) return null;
-//     const user: User= await response.json();
-//     return user;
-// }

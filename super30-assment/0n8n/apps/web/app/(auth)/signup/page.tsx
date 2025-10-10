@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import api from '@lib/api'
 
 const SignupPage = () => {
 
@@ -13,7 +14,7 @@ const SignupPage = () => {
   type Event= React.FormEvent<HTMLFormElement>
   const handelFormSubmit= async (e:Event)=>{
     e.preventDefault();
-    const res=await axios.post("http://localhost:8080/api/v0/user/signup",{name:name,email:email, password: password},{
+    const res=await api.post("/user/signup",{name:name,email:email, password: password},{
       withCredentials: true
     })
     setName('')
