@@ -3,6 +3,7 @@
         "Creds",
         "nodrag",
         "reactflow",
+        "Turborepo",
         "xyflow"
     ]
 }
