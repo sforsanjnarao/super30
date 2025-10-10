@@ -42,7 +42,7 @@ The backend is responsible for user management, password security, and session (
 
 The authentication revolves around the `User` model defined in `prisma/schema.prisma`. It stores essential user information and establishes relationships with other models like `Workflow` and `Credentials`.
 
-prisma
+```prisma
 // prisma/schema.prisma
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -51,6 +51,7 @@ model User {
   userName  String?
   // ... relations
 }
+```
 
 
 
@@ -87,7 +88,7 @@ The frontend uses Next.js with the App Router to create a secure and efficient u
 
 The file `lib/api.ts` creates a pre-configured Axios instance. This is the cornerstone of frontend-to-backend communication.
 
-typescript
+```typescript
 // lib/api.ts
 import axios from "axios";
 
@@ -97,7 +98,7 @@ const api = axios.create({
 });
 
 export default api;
-
+```
 
 The `withCredentials: true` setting is essential. It automatically handles the sending of the `httpOnly` cookie from the browser to the backend.
 
@@ -151,7 +152,7 @@ This is handled by the `(dashboard)/layout.tsx` file, a **React Server Component
 
 The following environment variables are required for the authentication system to function:
 
-bash
+```bash
 # .env
 
 # Used by Prisma to connect to the database
@@ -159,3 +160,4 @@ DATABASE_URL="mongodb+srv://..."
 
 # A long, complex, and secret string used to sign the JWTs
 JWT_PASS="your-super-secret-jwt-key"
+```
