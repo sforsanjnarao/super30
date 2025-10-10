@@ -29,7 +29,7 @@ const SignupPage = () => {
     <div>
       <form onSubmit={handelFormSubmit}>
       <label htmlFor="email">name</label>
-      <input type="text" placeholder='sanjana' id='name' onChange={(e)=>setName(e.target.value)} value={name}/>
+      <input type="text" placeholder='your name' id='name' onChange={(e)=>setName(e.target.value)} value={name}/>
         <label htmlFor="email">Email</label>
         <input type="text" placeholder='sanjna@gmail.com' id='email' onChange={(e)=>setEmail(e.target.value)} value={email}/>
         <label htmlFor="email">password</label>

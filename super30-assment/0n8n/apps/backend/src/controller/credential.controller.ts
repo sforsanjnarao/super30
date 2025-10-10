@@ -10,6 +10,6 @@ export const postCredential=async (req:Request,res:Response)=>{
     res.send({message:"post the credentials: from here we make use post the credentials"})
 }
 
-export const getCredentialOfPercrulID=async (req:Request,res:Response)=>{
+export const getCredentialOfParticularD=async (req:Request,res:Response)=>{
     res.send({message:"post the credentials: from here we make use post the credentials"})
 }
