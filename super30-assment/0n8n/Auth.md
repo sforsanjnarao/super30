@@ -42,7 +42,7 @@ The backend is responsible for user management, password security, and session (
 
 The authentication revolves around the `User` model defined in `prisma/schema.prisma`. It stores essential user information and establishes relationships with other models like `Workflow` and `Credentials`.
 
-```prisma
+prisma
 // prisma/schema.prisma
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
