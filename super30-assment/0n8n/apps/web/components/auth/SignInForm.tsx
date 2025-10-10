@@ -1,4 +1,5 @@
-// components/auth/SignInForm.tsx
+//in this use zod and for form it's react-hook-form
+
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -35,7 +36,7 @@ export function SignInForm() {
     });
 
     if (response.status==200) {
-      router.push("/dashboard");
+      router.push("/home");
     } else {
       setError("Something went wrong.");
     }

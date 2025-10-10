@@ -7,7 +7,7 @@ export default function SignOutButton() {
   const router = useRouter();
 
   const handleSignOut = async () => {
-    const response = await axios.post("http://localhost:YOUR_BACKEND_PORT/api/auth/signout", {
+    const response = await axios.post("http://localhost:8080/api/v0/user/signout", {
     });
 
     if (response.status==200) {

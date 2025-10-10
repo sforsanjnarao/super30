@@ -36,7 +36,7 @@ export function SignUpForm() {
     });
 
     if (response.status==200) {
-      router.push("/dashboard");
+      router.push("/home");
     } else {
       
       setError("Something went wrong.");
