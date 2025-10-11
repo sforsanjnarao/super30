@@ -35,7 +35,8 @@ export const signup= async (req:Request, res:Response)=>{
   
     res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        // secure: process.env.NODE_ENV === 'production',
+        secure: false,
         maxAge: 7 * 24 * 60 * 60 * 1000,
         sameSite: 'strict',
       });
@@ -70,7 +71,8 @@ export const signin=async (req:Request, res:Response)=>{
     
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            // secure: process.env.NODE_ENV === 'production',
+            secure: false,
             maxAge: 7 * 24 * 60 * 60 * 1000,
             sameSite: 'strict',
           });
@@ -114,7 +116,6 @@ export const itsMe=async (req: IGetUserAuthInfoRequest, res: Response)=>{
             email: true,
           },
         });
-    
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }

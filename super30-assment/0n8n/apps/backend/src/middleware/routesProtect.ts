@@ -15,6 +15,7 @@ export const protect=async (req:AuthRequest,res:Response, next:NextFunction)=>{
         
         const decode= jwt.verify(token, process.env.JWT_PASS as string) 
         req.user=decode
+        //{id:"745686563763", iat:1760173861}
         next()
         
     }

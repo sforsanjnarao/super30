@@ -26,23 +26,20 @@ model User{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-model Workflow{
+model Workflow{ //this like a workflow
     id            String   @id @default(auto()) @map("_id") @db.ObjectId
     name          String  @unique
-    
     author        User      @relation(fields: [authorId],references: [id])
     authorId      String    @db.ObjectId
     webhookUrl     String?   @unique   //basically a url or we can it webhookUrl
     active        Boolean   @default(false)
     nodes         Json[]
     connections   Json[]
-    // settings      String
-    // staticData    String
-    TriggerCount  Int  @default(0)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
 }
+
 
 
 model Credentials{
@@ -56,3 +53,4 @@ model Credentials{
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+

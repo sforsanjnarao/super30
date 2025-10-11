@@ -91,8 +91,8 @@ export const ActivateWorkflow =async (req:Request,res:Response)=>{
             webhookUrl: webhookId  ?? null
         }
     });
-    // const webhookUrl=`${process.env.LOCAL_SERVER}/webhook/handler/${webhookId}`
-    res.status(201).send({message:"successfully make a url",updateWorkflow, /*webhookUrl*/})
+    const webhookUrl=`${process.env.LOCAL_SERVER}/webhook/handler/${webhookId}`
+    res.status(201).send({message:"successfully make a url",updateWorkflow, webhookUrl})
 
     res.send({message:"activate workflow"}) // when some message comes it gonna hig thi 
 } 

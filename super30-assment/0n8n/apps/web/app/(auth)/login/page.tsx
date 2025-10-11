@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import {useRouter} from 'next/router'
+import {useRouter} from 'next/navigation'
 import api from '@lib/api'
 
 const LoginPage = () => {
@@ -12,12 +12,10 @@ const LoginPage = () => {
   type Event= React.FormEvent<HTMLFormElement>
   const handelFormSubmit= async (e:Event)=>{
       e.preventDefault();
-      const res= await api.post("/user/signin",{email:email, password: password},{
-        
-      })
+      const res= await api.post("/user/signin",{email:email, password: password})
       setEmail('')
       setPassword('')
-      if (res.status === 200) {
+      if (res.status === 201) {
         router.push('/home');
       } else {
         console.log("Login failed:", res.data);
