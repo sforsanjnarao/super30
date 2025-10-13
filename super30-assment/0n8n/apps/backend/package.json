@@ -37,5 +37,6 @@
   "devDependencies": {
     "prisma": "^6.16.2",
     "tsx": "^4.20.5"
-  }
+  },
+  "types": "./dist/index.d.ts"
 }
