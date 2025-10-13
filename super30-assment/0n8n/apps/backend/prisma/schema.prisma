@@ -40,7 +40,21 @@ model Workflow{ //this like a workflow
 
 }
 
+//trigger-node
+//action-node
 
+// model Node {
+//   id            String   @id @default(auto()) @map("_id") @db.ObjectId
+//   workflowId     String             @unique
+//   workflow       Workflow               @relation(fields: [workflowId], references: [id])
+//   nodeId         String
+//   type           AvailableNode       @relation(fields:[nodeId], references: [id])
+// }
+
+// model AvailableNode{
+//   id            String   @id @default(auto()) @map("_id") @db.ObjectId
+//   nodes       Node[]
+// }
 
 model Credentials{
   id     String @id @default(auto()) @map("_id") @db.ObjectId
