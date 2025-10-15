@@ -75,26 +75,23 @@ export const ActivateWorkflow =async (req:Request,res:Response)=>{
     if (!id) {
         return res.status(400).json({ message: "Workflow ID is required" });
     }
-    const {active}=req.body
+    const {active}=req.body //from frontend we need to send tue and false
     if (typeof active !== 'boolean') {
         return res.status(400).json({ message: "The 'active' field must be a boolean." });
     }
-    let webhookId;
-    if(active){
-        webhookId= nanoid(10)
-    } 
+    let webhookId = active ? nanoid(10) : null;
+    
     const updateWorkflow = await prisma.workflow.update({
         where: {
-            id: id},
+            id: id
+        },
         data: {
-            active: true,
-            webhookUrl: webhookId  ?? null
+            active,
+            webhookId
         }
     });
     const webhookUrl=`${process.env.LOCAL_SERVER}/webhook/handler/${webhookId}`
     res.status(201).send({message:"successfully make a url",updateWorkflow, webhookUrl})
-
-    res.send({message:"activate workflow"}) // when some message comes it gonna hig thi 
 } 
 export const getAllWorkflowsController= async(req:Request,res:Response)=>{
         const allWorkflow= await prisma.workflow.findMany();
@@ -110,6 +107,7 @@ export const updateWorkflowController = async (req: Request, res: Response) => {
     const { nodes, connections } = req.body;
       //add validation for nodes and connection is an array
 
+      console.log(id, nodes, connections)
     const updatedWorkflow = await prisma.workflow.update({
         where: { id: id } ,
         data: {

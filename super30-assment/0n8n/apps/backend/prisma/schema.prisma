@@ -31,14 +31,58 @@ model Workflow{ //this like a workflow
     name          String  @unique
     author        User      @relation(fields: [authorId],references: [id])
     authorId      String    @db.ObjectId
-    webhookUrl     String?   @unique   //basically a url or we can it webhookUrl
+    webhookId     String?   @unique   //basically a url or we can it webhookUrl
     active        Boolean   @default(false)
     nodes         Json[]
     connections   Json[]
+    executions   Execution[]
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
 }
+
+
+model Execution {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  workflow    Workflow  @relation(fields: [workflowId], references: [id])
+  workflowId  String    @db.ObjectId
+  status      String    // e.g., "running", "completed", "failed"
+  startedAt   DateTime  @default(now())
+  finishedAt  DateTime?
+  data        Json?     // To store the initial data that started the workflow
+  error       Json?     // To store any error information if the execution failed
+  ExecutionLog  ExecutionLog[]
+
+}
+
+
+model ExecutionLog {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  execution   Execution @relation(fields: [executionId], references: [id])
+  executionId String    @db.ObjectId
+  nodeId      String    // The unique ID of the node from your workflow's `nodes` JSON
+  nodeType    String
+  nodeName    String
+  inputData   Json?
+  outputData  Json?
+  status      String    // e.g., "success", "error"
+  executedAt  DateTime  @default(now())
+}
+
+
+model Credentials{
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String? 
+
+  author        User    @relation(fields: [authorId],references: [id])
+  authorId    String   @db.ObjectId
+  data   Json
+  type   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 
 //trigger-node
 //action-node
@@ -55,16 +99,3 @@ model Workflow{ //this like a workflow
 //   id            String   @id @default(auto()) @map("_id") @db.ObjectId
 //   nodes       Node[]
 // }
-
-model Credentials{
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  name   String? 
-
-  author        User    @relation(fields: [authorId],references: [id])
-  authorId    String   @db.ObjectId
-  data   Json
-  type   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
