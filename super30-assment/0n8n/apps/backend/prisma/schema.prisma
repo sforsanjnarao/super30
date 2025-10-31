@@ -62,8 +62,8 @@ model ExecutionLog {
   execution   Execution @relation(fields: [executionId], references: [id])
   executionId String    @db.ObjectId
   nodeId      String    // The unique ID of the node from your workflow's `nodes` JSON
-  nodeType    String
-  nodeName    String
+  nodeType    String?
+  nodeName    String?
   inputData   Json?
   outputData  Json?
   status      String    // e.g., "success", "error"

@@ -10,82 +10,114 @@ import type { JwtPayload } from "jsonwebtoken";
 //   user?: string | JwtPayload;
 // }
 
-export const signup= async (req:Request, res:Response)=>{
-    const {name,email,password}=req.body;
-    if(!name || !email || !password){
-        return res.status(400).send({message:"Missing required fields"})
-    }
-    const existingUser=await prisma.user.findUnique({
-        where:{
-            email:email
-        }
-    })
-    if(existingUser){
-        return res.json({message:"user already exist, try signin", existingUser:existingUser.id})
-    }
-    let hashedPassword= await bcrypt.hash(password,10)
-    const savingUserDataInDB=await prisma.user.create({
-        data:{
-            userName:name,
-            email:email,
-            password:hashedPassword
-        }
-    })
-    const token= jwt.sign({id:savingUserDataInDB.id}, process.env.JWT_PASS as string)
+// export const signup= async (req:Request, res:Response)=>{
+//     const {name,email,password}=req.body;
+//     if(!name || !email || !password){
+//         return res.status(400).send({message:"Missing required fields"})
+//     }
+//     const existingUser=await prisma.user.findUnique({
+//         where:{
+//             email:email
+//         }
+//     })
+//     if(existingUser){
+//         return res.json({message:"user already exist, try signin", existingUser:existingUser.id})
+//     }
+//     let hashedPassword= await bcrypt.hash(password,10)
+//     const savingUserDataInDB=await prisma.user.create({
+//         data:{
+//             userName:name,
+//             email:email,
+//             password:hashedPassword
+//         }
+//     })
+//     const token= jwt.sign({id:savingUserDataInDB.id}, process.env.JWT_PASS as string)
   
-    res.cookie('token', token, {
-        httpOnly: true,
-        // secure: process.env.NODE_ENV === 'production',
-        secure: false,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        sameSite: 'strict',
-      });
+//     res.cookie('token', token, {
+//         httpOnly: true,
+//         // secure: process.env.NODE_ENV === 'production',
+//         secure: false,
+//         maxAge: 7 * 24 * 60 * 60 * 1000,
+//         sameSite: 'strict',
+//       });
   
 
-  return res.status(201).json({message:"User registered",
-    user:{
-        id:savingUserDataInDB.id,
-        name:savingUserDataInDB.userName,
-        email: savingUserDataInDB.email
+//   return res.status(201).json({message:"User registered",
+//     user:{
+//         id:savingUserDataInDB.id,
+//         name:savingUserDataInDB.userName,
+//         email: savingUserDataInDB.email
+//     }
+//   })
+// };
+
+import { getUser, signinUser, signupUser } from '../services/user.service.ts'; // Import the service
+
+export const signup = async (req: Request, res: Response) => {
+    try {
+        const { name, email, password } = req.body;
+        if (!name || !email || !password) {
+            return res.status(400).send({ message: "Missing required fields" });
+        }
+
+        const savedUser = await signupUser({ name, email, password });
+
+        const token = jwt.sign({ id: savedUser.id }, process.env.JWT_PASS as string,{ expiresIn: "7d" });
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            // secure: false,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: 'strict',
+        });
+
+        return res.status(200).json({
+            message: "User registered",
+            user: {
+                id: savedUser.id,
+                name: savedUser.userName,
+                email: savedUser.email
+            }
+        });
+
+    } catch (error:any) {   //why only the type any
+        if (error.message === "User already exists") {
+            return res.status(409).json({ message: error.message }); 
+        }
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-  })
 };
 
+
 export const signin=async (req:Request, res:Response)=>{
+  try{
     const {email,password}=req.body
     if( !email || !password){
         return res.status(400).send({message:"Missing required fields"})
     }
-    const savedUser=await prisma.user.findUnique({
-        where:{
-            email:email
-        }
-    })
-    if(!savedUser) return res.status(401).json({message:'please register use first'})
-       
-        const checkPassword=await bcrypt.compare(password,savedUser.password as string)
-    if(!checkPassword) return res.json({message:'wrong credentials'})
-        
+        const savedUser= await signinUser({email, password})
         
         const token= jwt.sign({id:savedUser.id}, process.env.JWT_PASS as string)
     
         res.cookie('token', token, {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
-            secure: false,
+            secure: process.env.NODE_ENV === 'production',
+            // secure: false,
             maxAge: 7 * 24 * 60 * 60 * 1000,
             sameSite: 'strict',
           });
       
 
-        return res.status(201).json({message:"User registered",
+        return res.status(201).json({message:"User signed in successfully",
             user:{
                 id:savedUser.id,
                 name:savedUser.userName,
                 email: savedUser.email
             }
           })
-
+        }catch (error: any) {
+          return res.status(401).json({ message: error.message });
+        }
 }
 
 
@@ -106,16 +138,7 @@ export const itsMe=async (req: IGetUserAuthInfoRequest, res: Response)=>{
       }
     
       try {
-        const user = await prisma.user.findUnique({
-          where: {
-            id: req.user.id,
-          },
-          select: {
-            id: true,
-            userName: true,
-            email: true,
-          },
-        });
+        const user = await getUser(req.user.id)
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }

@@ -1,8 +1,18 @@
 import { Router } from "express";
-import { getCredential, getCredentialOfParticularD, postCredential } from "../controller/credential.controller.ts";
-const router=Router()
+import {
+  createCredentialController,
+  getCredentialsController,
+  deleteCredentialController
+} from "../controller/credential.controller.ts";
+import { protect } from "../middleware/routesProtect.ts";
 
-router.post('/',postCredential)
-router.get('/',getCredential )
-router.get('/:id',getCredentialOfParticularD)
-export default router
+const router = Router();
+
+// Secure all credential routes. A user must be logged in.
+router.use(protect);
+
+router.post("/", createCredentialController);
+router.get("/", getCredentialsController);
+router.delete("/:id", deleteCredentialController);
+
+export default router;
