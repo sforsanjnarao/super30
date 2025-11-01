@@ -6,12 +6,11 @@ The payload contains everything a worker needs to start: { executionId, nodeId, 
 Adds this payload to the Redis queue.*/
 
 
-import { kafka } from '../lib/kafka.ts'; // The KafkaJS client we defined earlier
+import { kafka } from '../lib/kafka.ts'; 
 
 const producer = kafka.producer();
 let isConnected = false;
 
-// Ensure producer is connected before use
 const ensureProducerConnected = async () => {
     if (!isConnected) {
         await producer.connect();
@@ -19,11 +18,10 @@ const ensureProducerConnected = async () => {
     }
 }
 
-// This function will be called by our execution service
 export const addNodeJobToQueue = async (jobData: { executionId: string, nodeId: string, inputData: any }) => {
     await ensureProducerConnected();
     await producer.send({
-        topic: 'node-execution-jobs', // Our Kafka topic
+        topic: 'node-execution-jobs', 
         messages: [
             { value: JSON.stringify(jobData) },
         ],

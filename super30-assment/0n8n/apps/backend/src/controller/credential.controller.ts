@@ -9,19 +9,18 @@ interface User{
 export interface AuthRequest extends Request{
     user?: User
 }
-// Controller for POST /credentials
+// POST /api/v0/credentials/
 export const createCredentialController = async (req: AuthRequest, res: Response) => {
   try {
     const { name, type, data } = req.body;
-    const userId = req.user!.id; // From 'protect' middleware
+    const userId = req.user!.id; 
 
     if (!name || !type || !data) {
       return res.status(400).json({ message: "Missing required fields: name, type, data" });
     }
 
     const newCredential = await credentialService.createCredential(name, type, data, userId);
-
-    // NEVER return the 'data' field, even the encrypted one.
+    //not returning data
     res.status(201).json({
         id: newCredential.id,
         name: newCredential.name,
@@ -33,26 +32,27 @@ export const createCredentialController = async (req: AuthRequest, res: Response
   }
 };
 
-// Controller for GET /credentials
+//GET /api/v0/credentials/
 export const getCredentialsController = async (req: AuthRequest, res: Response) => {
     try {
         const userId = req.user!.id;
         const credentials = await credentialService.getCredentialsForUser(userId);
         res.status(200).json(credentials);
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error lalala" });
     }
 };
 
-// Controller for DELETE /credentials/:id
+// DELETE /api/v0/credentials/:id
 export const deleteCredentialController = async (req: AuthRequest, res: Response) => {
     try {
         const userId = req.user!.id;
         const { id } = req.params as {id:string};
 
         await credentialService.deleteCredential(id, userId);
-        res.status(204).send(); // Success, no content
+        res.status(204).send(); 
     } catch (error: any) {
         res.status(404).json({ message: error.message });
     }
 };
+

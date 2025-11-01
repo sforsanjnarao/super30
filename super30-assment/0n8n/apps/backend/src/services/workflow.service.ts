@@ -30,13 +30,11 @@ export const getWorkflowById = async (workflowId: string, userId: string) => {
   });
 };
 
-// Service to UPDATE the nodes and connections of a workflow
 export const updateWorkflowGraph = async (workflowId: string, userId: string, nodes: any[], connections: any) => {
-  // Using updateMany ensures we only update if the authorId matches.
   const result = await prisma.workflow.updateMany({
     where: {
       id: workflowId,
-      authorId: userId, // CRITICAL: Security check
+      authorId: userId, 
     },
     data: {
       nodes,
@@ -51,15 +49,14 @@ export const updateWorkflowGraph = async (workflowId: string, userId: string, no
   return { success: true };
 };
 
-// Service to ACTIVATE or DEACTIVATE a workflow and its webhook
 export const toggleWorkflowActivation = async (workflowId: string, userId: string, active: boolean) => {
-  // First, verify ownership
+
+    //from above
   const workflow = await getWorkflowById(workflowId, userId);
   if (!workflow) {
     throw new Error("Workflow not found or user does not have permission.");
   }
   
-  // Generate a new webhookId only when activating. Set to null when deactivating.
   const webhookId = active ? nanoid(12) : null;
 
   return prisma.workflow.update({
@@ -74,13 +71,11 @@ export const toggleWorkflowActivation = async (workflowId: string, userId: strin
 };
 
 
-// Service to DELETE a workflow
 export const deleteWorkflow = async (workflowId: string, userId: string) => {
-    // We use deleteMany to ensure we only delete if the authorId matches.
     const result = await prisma.workflow.deleteMany({
         where: {
             id: workflowId,
-            authorId: userId // CRITICAL: Security check
+            authorId: userId 
         }
     });
 

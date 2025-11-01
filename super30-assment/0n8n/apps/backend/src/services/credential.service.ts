@@ -7,7 +7,7 @@ const algorithm = 'aes-256-gcm';
 const key = scryptSync(process.env.ENCRYPTION_KEY!, 'salt', 32); // Use a salt for the key derivation
 
 const encrypt = (text: string) => {
-  const iv = randomBytes(16); // Initialization vector
+  const iv = randomBytes(16); 
   const cipher = createCipheriv(algorithm, key, iv);
   const encrypted = Buffer.concat([cipher.update(text), cipher.final()]);
   const authTag = cipher.getAuthTag();
@@ -27,11 +27,8 @@ const decrypt = (hash: { iv: string, content: string, authTag: string }) => {
   return decrypted.toString();
 };
 
-// --- Service Functions ---
 
-// Service to CREATE a new, encrypted credential
 export const createCredential = async (name: string, type: string, data: object, userId: string) => {
-  // Encrypt the sensitive data object
   const encryptedData = encrypt(JSON.stringify(data));
 
   return prisma.credentials.create({
@@ -39,18 +36,16 @@ export const createCredential = async (name: string, type: string, data: object,
       name,
       type,
       authorId: userId,
-      data: encryptedData as any, // Store the encrypted hash object
+      data: encryptedData as any, 
     },
   });
 };
 
-// Service to GET ALL credentials for a user (WITHOUT exposing secret data)
 export const getCredentialsForUser = async (userId: string) => {
   return prisma.credentials.findMany({
     where: {
       authorId: userId,
     },
-    // CRITICAL: Select only the safe fields to return to the frontend
     select: {
       id: true,
       name: true,
@@ -63,12 +58,11 @@ export const getCredentialsForUser = async (userId: string) => {
   });
 };
 
-// Service to DELETE a credential, ensuring ownership
 export const deleteCredential = async (credentialId: string, userId: string) => {
   const result = await prisma.credentials.deleteMany({
     where: {
       id: credentialId,
-      authorId: userId, // Security check
+      authorId: userId,
     },
   });
 
@@ -78,7 +72,6 @@ export const deleteCredential = async (credentialId: string, userId: string) => 
   return { success: true };
 };
 
-// INTERNAL-ONLY Service for the WORKER to get and decrypt credentials
 export const getAndDecryptCredential = async (credentialId: string, userId: string): Promise<object | null> => {
     const credential = await prisma.credentials.findFirst({
         where: {
@@ -86,11 +79,14 @@ export const getAndDecryptCredential = async (credentialId: string, userId: stri
             authorId: userId,
         }
     });
-
+    console.log('credential:',credential)
+    
+    console.log('before check')
     if (!credential || !credential.data) {
         return null;
     }
-
+    console.log('after check')
     const decryptedDataString = decrypt(credential.data as any);
+    console.log('decryptedDataString',decryptedDataString)
     return JSON.parse(decryptedDataString);
 }

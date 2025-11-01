@@ -8,7 +8,6 @@ import { protect } from "../middleware/routesProtect.ts";
 
 const router = Router();
 
-// Secure all credential routes. A user must be logged in.
 router.use(protect);
 
 router.post("/", createCredentialController);
