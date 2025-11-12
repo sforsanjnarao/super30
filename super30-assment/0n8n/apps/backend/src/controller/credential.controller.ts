@@ -50,7 +50,7 @@ export const deleteCredentialController = async (req: AuthRequest, res: Response
         const { id } = req.params as {id:string};
 
         await credentialService.deleteCredential(id, userId);
-        res.status(204).send(); 
+        res.status(204).send({message:`credential ID ${id} deleted`}); 
     } catch (error: any) {
         res.status(404).json({ message: error.message });
     }

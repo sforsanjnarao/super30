@@ -13,18 +13,29 @@ let isConnected = false;
 
 const ensureProducerConnected = async () => {
     if (!isConnected) {
-        await producer.connect();
-        isConnected = true;
+        try {
+            await producer.connect();
+            console.log("✅ Kafka producer connected");
+            isConnected = true;
+        } catch (err) {
+            console.error("❌ Kafka connection failed:", err);
+        }
     }
 }
 
 export const addNodeJobToQueue = async (jobData: { executionId: string, nodeId: string, inputData: any }) => {
-    await ensureProducerConnected();
-    await producer.send({
-        topic: 'node-execution-jobs', 
-        messages: [
-            { value: JSON.stringify(jobData) },
-        ],
-    });
-    console.log(`🚀 Job sent to Kafka for executionId: ${jobData.executionId}, nodeId: ${jobData.nodeId}`);
+    try{
+        await ensureProducerConnected();
+            console.log("🟡 Sending job to Kafka...");
+        await producer.send({
+            topic: 'node-execution-jobs', 
+            messages: [
+                { value: JSON.stringify(jobData) },
+            ],
+        });
+        console.log(`🚀 Job sent to Kafka for executionId: ${jobData.executionId}, nodeId: ${jobData.nodeId}`);
+    }catch (err) {
+        console.error("❌ Failed to send Kafka job:", err);
+    }
+    
 };

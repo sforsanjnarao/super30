@@ -20,6 +20,7 @@ import prisma from '../lib/prisma.ts';
 
 import { executeNode } from '../services/node-executor.service.ts';
 import { addNodeJobToQueue } from '../services/queue.service.ts';
+import { finishExecution } from '../services/execution.service.ts';
 
 const consumer = kafka.consumer({ groupId: 'workflow-execution-group' });
 
@@ -107,16 +108,7 @@ const logStep = async (executionId: string, nodeId: string, input: any, output: 
     });
 };
 
-const finishExecution = async (executionId: string, status: 'completed' | 'failed', error?: any) => {
-    return prisma.execution.update({
-        where: { id: executionId },
-        data: {
-            status,
-            error,
-            finishedAt: new Date(),
-        }
-    });
-};
+
 
 startWorker().catch(console.error);
 

@@ -49,15 +49,49 @@ export const updateWorkflowGraph = async (workflowId: string, userId: string, no
   return { success: true };
 };
 
-export const toggleWorkflowActivation = async (workflowId: string, userId: string, active: boolean) => {
+interface NodeData {
+  id: string;
+  type: string;
+  parameters?: Record<string, any>;
+  credentialsId?: string;
+  position?: { x: number; y: number };
+}
 
-    //from above
+interface ConnectionData {
+  id: string;
+  source: string;
+  target: string;
+}
+
+
+export const toggleWorkflowActivation = async (workflowId: string, userId: string, active: boolean):Promise<any> => {
+
   const workflow = await getWorkflowById(workflowId, userId);
   if (!workflow) {
     throw new Error("Workflow not found or user does not have permission.");
   }
   
-  const webhookId = active ? nanoid(12) : null;
+  // const webhookId = active ? nanoid(12) : null;
+  let webhookId = workflow.webhookId; 
+  
+
+  if (active) {
+        const startingNodes = findStartingNodes(workflow.nodes as any , workflow.connections as any);
+        
+        const hasWebhookTrigger = startingNodes.some(node => node.type === 'webhookNode');
+
+        if (hasWebhookTrigger) {
+            if (!webhookId) {
+                webhookId = nanoid(12);
+            }
+        } else {
+            webhookId = null;
+        }
+
+    } else {
+        webhookId = null;
+    }
+
 
   return prisma.workflow.update({
     where: {
@@ -67,7 +101,18 @@ export const toggleWorkflowActivation = async (workflowId: string, userId: strin
       active,
       webhookId,
     },
+  }) ;
+
+};
+
+  const findStartingNodes = (nodes: NodeData[], connections: ConnectionData[])=> {
+    const targetNodeIds = new Set<string>();
+    connections.forEach(conn => {
+    if (conn && conn.target) {
+      targetNodeIds.add(conn.target);
+    }
   });
+    return nodes.filter(node => !targetNodeIds.has(node.id));
 };
 
 

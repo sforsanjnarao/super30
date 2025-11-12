@@ -72,7 +72,6 @@ export const executeNode = async (job: { executionId: string, nodeId: string, in
   }
   console.log('nodeConfig.credentialsId',nodeConfig.credentialsId)
   console.log('lalal',credentials)
-
   
   const nodeInput: INodeInput = {
     parameters: nodeConfig.parameters,

@@ -1,12 +1,20 @@
 import  type { Request, Response } from 'express';
 import { startWorkflowFromWebhook } from '../services/execution.service.ts';
 
+import type  { IncomingHttpHeaders } from "http";
+import type { ParsedQs } from "qs";
 
+export interface WebhookData {
+  body: any;
+  headers: IncomingHttpHeaders;
+  query: ParsedQs;
+}
 //POST   /api/v0/webhook/handler/:webhookId
 export const handleWebhook = async (req: Request, res: Response) => {
     try {
         const { webhookId } = req.params;
-        const webhookData = {
+        if (!webhookId) throw new Error('webhookId not in the params');
+        const webhookData: WebhookData = {
             body: req.body,
             headers: req.headers,
             query: req.query,
