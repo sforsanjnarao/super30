@@ -22,6 +22,7 @@ function startWorker() {
                     const submission = yield client.brPop("submission", 0);
                     console.log(submission);
                     yield new Promise(resolve => setTimeout(resolve, 1000));
+                    yield client.publish('trade', JSON.stringify(submission));
                 }
                 catch (error) {
                     console.error("Error processing submission:", error);

@@ -11,6 +11,7 @@ async function startWorker() {
                 const submission = await client.brPop("submission", 0);
                 console.log(submission)
                 await new Promise(resolve => setTimeout(resolve, 1000));
+                await client.publish('trade',JSON.stringify(submission))
             } catch (error) {
                 console.error("Error processing submission:", error);
             }
