@@ -15,14 +15,13 @@ services:
       - "9092:9092"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-# worker:
-#   build: .
-#   command: ["node", "dist/workers/execution.worker.js"]
-#   depends_on:
-#     - kafka
-#     - zookeeper
-#   environment:
-#     KAFKA_BROKER: kafka:9092
+  worker:
+    build: .  # Build from current directory (apps/backend)
+    container_name: execution_worker
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092

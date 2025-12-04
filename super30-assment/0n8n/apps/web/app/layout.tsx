@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-import { redirect } from "next/navigation";
+import { Toaster } from "@components/ui/sonner";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,7 +37,9 @@ export default async function RootLayout({
           >
 
         <div className="theme-dark p-8">
-          <main className="mt-8">{children}</main>
+          {children}
+
+          <Toaster position="top-center" richColors /> 
         </div>
 
       </ThemeProvider>

@@ -16,12 +16,12 @@
 // export default api;
 
 
-import axios from "axios";
+// import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:8080/api/v0",
+// const api = axios.create({
+//   baseURL: "http://localhost:8080/api/v0",
 
-  withCredentials: true,
-});
+//   withCredentials: true,
+// });
 
-export default api;
+// export default api;

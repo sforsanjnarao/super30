@@ -6,7 +6,7 @@ import { handleWebhook } from "../controller/webhook.controller.ts";
 const router = Router();
 
 
-router.post("/handler/:webhookId",protect, handleWebhook) 
+router.post("/handler/:webhookId", handleWebhook) 
 
 
 
