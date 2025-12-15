@@ -1,15 +1,6 @@
-// import {WebSocket, WebSocketServer} from 'ws'
-
-import { logger } from "./logger";
-import {  GameManager } from "./store";
-export const gameManager = new GameManager()
-
-
-
-
-logger()
+import {PubSubManager} from './PubSubManager'
 
 
 setInterval(()=>{
-    gameManager.addGame(Math.random().toString())
-},1000)
+    PubSubManager.getInstance().Subscriber(Math.random().toString(),'apple')
+},3000)

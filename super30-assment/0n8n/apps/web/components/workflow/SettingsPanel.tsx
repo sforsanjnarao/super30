@@ -8,36 +8,40 @@ import { TelegramSettings } from "./settings/TelegramSettings";
 import axios from "axios";
 import { AgentSettings } from "./settings/AgentSettings";
 import { IfSettings } from "./settings/IfSettings";
-// import { AgentSettings } from "./settings/AgentSettings";
-// ... import other settings components
+import { AppNode, credentialTypes, metaData } from "@lib/types02";
 
-// This map links a node's 'type' to the component that can edit it.
-const settingsMap = {
+
+const settingsMap :Record<string, React.ComponentType<SettingsFormProps>> = {
   telegramNode: TelegramSettings,
   Agent: AgentSettings, 
   If: IfSettings, 
-  // Your backend uses 'Telegram' and 'Agent', so we should align these keys.
-  // For now, let's assume the frontend node types are telegramNode, agentNode etc.
 };
 
-export function SettingsPanel({ selectedNodeId, nodes, onClose, onUpdateNodeData }) {
-     interface Credential {
-    id: string;
-    name: string;
-    type: string;
-    createdAt: string;
-    }
-  const [credentials, setCredentials] = useState<Credential[]>([]);
+
+interface SettingsPanelProps{
+  selectedNodeId?:string | null
+  nodes:AppNode[],
+  onClose:()=>void,
+  onUpdateNodeData:(nodeId:string, newData: Partial<metaData>)=>void
+}
+
+export interface SettingsFormProps{
+  nodeData:metaData
+  onUpdate:(updates: Partial<metaData>) => void;
+  credentials:credentialTypes[]
+}
+export function SettingsPanel({ selectedNodeId, nodes, onClose, onUpdateNodeData }:SettingsPanelProps) {
   
-  // Find the full node object from the ID
-  const selectedNode = nodes.find(node => node.id === selectedNodeId);
+ 
+  const [credentials, setCredentials] = useState<credentialTypes[]>([]);
+ 
+  const selectedNode = nodes.find((node) => node.id === selectedNodeId);
    
-  // Fetch all credentials when the panel opens for the first time
   useEffect(() => {
     if (selectedNode) {
       const fetchCredentials = async () => {
         try {
-          const response = await axios.get<Credential[]>(
+          const response = await axios.get<credentialTypes[]>(
         "http://localhost:8080/api/v0/credentials/",
         {
             withCredentials: true,
@@ -46,24 +50,24 @@ export function SettingsPanel({ selectedNodeId, nodes, onClose, onUpdateNodeData
 
         setCredentials(response.data);
         } catch (error:any) {
-          toast.error(error.message);
+          toast.error(error);
         }
       };
       fetchCredentials()
     }
-  }, [selectedNode]); // Re-fetch if the selected node changes (though often not necessary)
+  }, [selectedNode]); 
 
   if (!selectedNode) {
     return null;
   }
 
-  const SettingsComponent = settingsMap[selectedNode.type];
+  const SettingsComponent = settingsMap[selectedNode.type || ""];
 
   // This is a placeholder for getting the required credential type for a node
   // A better way is to have a small definition object for each node type
-  const getCredentialTypeForNode = (type) => {
+  const getCredentialTypeForNode = (type:string) => {
       if (type === 'telegramNode') return 'telegramApi';
-      if (type === 'agentNode') return 'openAiApi';
+      if (type === 'Agent') return 'openAiApi';
       return null;
   }
 
@@ -82,9 +86,10 @@ export function SettingsPanel({ selectedNodeId, nodes, onClose, onUpdateNodeData
         
         <div className="py-6">
           {SettingsComponent ? (
+            //TelegramSettings
             <SettingsComponent
               nodeData={selectedNode.data}
-              onUpdate={ (newData) => onUpdateNodeData(selectedNode.id, newData) }
+              onUpdate={(newData) => onUpdateNodeData(selectedNode.id, newData) }
               credentials={filteredCredentials}
             />
           ) : (

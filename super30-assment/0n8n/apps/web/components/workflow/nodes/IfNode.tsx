@@ -1,14 +1,16 @@
 'use client';
 
 import { NODE_DEFINITIONS } from '@/lib/nodes/definitions';
-import { Handle, Position } from '@xyflow/react';
+import { Handle, NodeProps, Position } from '@xyflow/react';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { AppNode } from '@lib/types02';
 
 // The "If" node needs a custom structure because it has multiple outputs.
 // It won't use our BaseNode directly.
-export default function IfNode({ data }) {
+export default function IfNode({ data }:NodeProps<AppNode>) {
   const definition = NODE_DEFINITIONS.find(def => def.type === 'If');
-
+  // let value1= data.parameters?.value1
+  // let value2= data.parameters?.value2
   return (
     <Card className="w-64 border-2">
       {/* The single input handle */}

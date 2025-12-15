@@ -27,7 +27,7 @@ export function Sidebar() {
                         aria-expanded={open}
                         className="w-full justify-between"
                     >
-                        Add a node...
+                        Add a node
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
@@ -47,7 +47,11 @@ export function Sidebar() {
                                         draggable
                                     >
                                         <node.icon className="mr-2 h-4 w-4" />
-                                        {node.name}
+                                        <p>
+                                            <b>{node.kind}: </b>
+                                            {node.name}
+                                        </p>
+                                        
                                     </CommandItem>
                                 ))}
                             </CommandGroup>

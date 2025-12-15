@@ -6,12 +6,12 @@
 
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  // url      = env("DATABASE_URL")
 }
 //i am connection user to workflow and Credentials with one to many relationship with email not id
 model User{
@@ -22,6 +22,7 @@ model User{
   //one to many relation
   Workflows Workflow[] 
   Credentials Credentials[]
+
   role      String   @default("user")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -31,7 +32,7 @@ model Workflow{ //this like a workflow
     name          String  @unique
     author        User      @relation(fields: [authorId],references: [id])
     authorId      String    @db.ObjectId
-    webhookId     String?   @unique   //basically a url or we can it webhookUrl
+    webhookId     String?   @unique     //if their is a webhook
     active        Boolean   @default(false)
     nodes         Json[]
     connections   Json[]

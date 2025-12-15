@@ -9,8 +9,24 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
-// Define the shape of our credential types and their required fields
-const credentialTypes = {
+// --- 1. Define Types for the Configuration Dictionary ---
+// This defines what a "Form Field" looks like
+type CredentialField = {
+    name: string;
+    label: string;
+    type: string;
+};
+
+// This defines the structure of our settings object
+type CredentialConfig = {
+    name: string;
+    fields: CredentialField[];
+};
+
+// --- 2. The Configuration Dictionary ---
+// We use Record<string, CredentialConfig> so TypeScript knows 
+// we can access this object using a string key.
+const CREDENTIAL_CONFIGS: Record<string, CredentialConfig> = {
     telegramApi: {
         name: 'Telegram API',
         fields: [{ name: 'botToken', label: 'Bot Token', type: 'password' }],
@@ -19,14 +35,19 @@ const credentialTypes = {
         name: 'OpenAI API',
         fields: [{ name: 'apiKey', label: 'API Key', type: 'password' }],
     },
-    // Add more types here as needed
 };
 
-export function AddCredentialDialog({ isOpen, onClose, onSuccess }: { isOpen: boolean, onClose: () => void, onSuccess: () => void }) {
-  const [step, setStep] = useState(1);
+interface AddCredentialDialogProps {
+    isOpen: boolean;
+    onClose: () => void;
+    onSuccess: () => void;
+}
+
+export function AddCredentialDialog({ isOpen, onClose, onSuccess }: AddCredentialDialogProps) {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [name, setName] = useState("");
-  const [data, setData] = useState({}); // To hold the values of the dynamic fields
+  // We use Record<string, string> because form data is just key-value pairs
+  const [data, setData] = useState<Record<string, string>>({}); 
   const [isCreating, setIsCreating] = useState(false);
 
   const handleFieldChange = (fieldName: string, value: string) => {
@@ -34,7 +55,6 @@ export function AddCredentialDialog({ isOpen, onClose, onSuccess }: { isOpen: bo
   };
 
   const resetState = () => {
-    setStep(1);
     setSelectedType(null);
     setName("");
     setData({});
@@ -50,6 +70,8 @@ export function AddCredentialDialog({ isOpen, onClose, onSuccess }: { isOpen: bo
         toast.error("Please fill in all required fields.");
         return;
     }
+
+    setIsCreating(true); // Disable button while saving
     
     const promise = new Promise((resolve, reject) => {
         axios.post(
@@ -64,24 +86,26 @@ export function AddCredentialDialog({ isOpen, onClose, onSuccess }: { isOpen: bo
                 headers: { "Content-Type": "application/json" },
             }
         )
-        .then(resolve)
-        .catch(reject);
+        .then((res) => {
+            resolve(res);
+            // Wait for success to close
+            handleClose();
+            onSuccess();
+            setIsCreating(false)
+        })
+        .catch(reject=>{setIsCreating(false),reject})
     });
 
     toast.promise(promise, {
         loading: 'Saving credential...',
-        success: () => {
-            handleClose();
-            onSuccess();
-            return 'Credential saved successfully!';
-        },
+        success: 'Credential saved successfully!',
         error: (err: any) =>
             err?.response?.data?.message || err.message || "Failed to save credential.",
     });
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add a New Credential</DialogTitle>
@@ -90,40 +114,54 @@ export function AddCredentialDialog({ isOpen, onClose, onSuccess }: { isOpen: bo
           </DialogDescription>
         </DialogHeader>
         
-        {/* Step 1: Select Type */}
-        <div className="space-y-2">
-            <Label htmlFor="cred-type">Credential Type</Label>
-            <Select onValueChange={(value) => setSelectedType(value)}>
-                <SelectTrigger id="cred-type">
-                    <SelectValue placeholder="Select a service..." />
-                </SelectTrigger>
-                <SelectContent>
-                    {Object.entries(credentialTypes).map(([key, value]) => (
-                        <SelectItem key={key} value={key}>{value.name}</SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-        </div>
+        <div className="space-y-4 py-4">
+            {/* Step 1: Select Type */}
+            <div className="space-y-2">
+                <Label htmlFor="cred-type">Credential Type</Label>
+                <Select onValueChange={(value) => {
+                    setSelectedType(value);
+                    setData({}); // Reset data fields if type changes
+                }}>
+                    <SelectTrigger id="cred-type">
+                        <SelectValue placeholder="Select a service..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {Object.entries(CREDENTIAL_CONFIGS).map(([key, config]) => (
+                            <SelectItem key={key} value={key}>{config.name}</SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
 
-        {/* Step 2: Fill in Details (conditionally rendered) */}
-        {selectedType && (
-            <div className="space-y-4 pt-4">
-                 <div className="space-y-2">
-                    <Label htmlFor="cred-name">Display Name</Label>
-                    <Input id="cred-name" value={name} onChange={e => setName(e.target.value)} placeholder="My OpenAI Key" />
-                </div>
-                {credentialTypes[selectedType].fields.map(field => (
-                    <div key={field.name} className="space-y-2">
-                        <Label htmlFor={field.name}>{field.label}</Label>
+            {/* Step 2: Fill in Details (Dynamic Rendering) */}
+            {selectedType && CREDENTIAL_CONFIGS[selectedType] && (
+                <div className="space-y-4 border-t pt-4">
+                     <div className="space-y-2">
+                        <Label htmlFor="cred-name">Display Name</Label>
                         <Input 
-                            id={field.name} 
-                            type={field.type}
-                            onChange={e => handleFieldChange(field.name, e.target.value)}
+                            id="cred-name" 
+                            value={name} 
+                            onChange={e => setName(e.target.value)} 
+                            placeholder="e.g. My Personal OpenAI Key" 
                         />
                     </div>
-                ))}
-            </div>
-        )}
+                    
+                    {/* Iterate over the fields defined in CREDENTIAL_CONFIGS */}
+                    {CREDENTIAL_CONFIGS[selectedType].fields.map(field => (
+                        <div key={field.name} className="space-y-2">
+                            <Label htmlFor={field.name}>{field.label}</Label>
+                            <Input 
+                                id={field.name} 
+                                type={field.type}
+                                value={data[field.name] || ''}
+                                onChange={e => handleFieldChange(field.name, e.target.value)}
+                                placeholder={field.label}
+                            />
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
         
         <DialogFooter>
           <Button variant="outline" onClick={handleClose}>Cancel</Button>
@@ -135,4 +173,3 @@ export function AddCredentialDialog({ isOpen, onClose, onSuccess }: { isOpen: bo
     </Dialog>
   );
 }
-

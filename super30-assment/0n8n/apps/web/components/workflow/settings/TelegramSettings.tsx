@@ -4,21 +4,32 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Credential } from "@/app/(app)/credentials/page"; // Re-use the type
+import { SettingsFormProps } from "../SettingsPanel";
+import { metaData } from "@lib/types02";
 
-interface TelegramSettingsProps {
-  nodeData: {
-    parameters?: {
-      chatId?: string;
-      text?: string;
-    };
-    credentialsId?: string;
+// interface TelegramSettingsProps {
+//   nodeData: {
+//     parameters?: {
+//       chatId?: string;
+//       text?: string;
+//     };
+//     credentialsId?: string;
+//   };
+//   onUpdate: (data: object) => void;
+//   credentials: Credential[];
+// }
+
+interface TelegramParams {
+  chatId?: string;
+  text?: string;
+}
+interface TelegramProps extends SettingsFormProps {
+  nodeData: metaData & {
+    parameters: TelegramParams;
   };
-  onUpdate: (data: object) => void;
-  credentials: Credential[];
 }
 
-export function TelegramSettings({ nodeData, onUpdate, credentials }: TelegramSettingsProps) {
+export function TelegramSettings({ nodeData, onUpdate, credentials }:TelegramProps) {
   
   const handleParamChange = (paramName: string, value: string) => {
     onUpdate({
@@ -30,7 +41,7 @@ export function TelegramSettings({ nodeData, onUpdate, credentials }: TelegramSe
   };
 
   const handleCredentialChange = (credentialId: string) => {
-     onUpdate({ credentialsId: credentialId });
+     onUpdate({ credentialId: credentialId });
   };
 
   return (
@@ -56,7 +67,7 @@ export function TelegramSettings({ nodeData, onUpdate, credentials }: TelegramSe
       <div className="space-y-2">
         <Label>Credential</Label>
         <Select
-          value={nodeData.credentialsId}
+          value={nodeData.credentialId}
           onValueChange={handleCredentialChange}
         >
           <SelectTrigger>

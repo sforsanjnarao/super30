@@ -2,13 +2,21 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Handle, Position } from '@xyflow/react';
-import React from 'react';
+import { LucideIcon } from "lucide-react";
+import React, { ReactNode } from 'react';
+
+interface BaseNodeProps {
+  title: string;
+  icon?: LucideIcon; // Allows passing the specific icon component
+  children?: ReactNode; // Allows passing nested JSX elements
+  isSource?: boolean;
+  isTarget?: boolean;
+}
 
 // This is a reusable component for the node's visual structure
-export function BaseNode({ title, icon: Icon, children, isSource, isTarget }) {
+export function BaseNode({ title, icon: Icon, children, isSource, isTarget }:BaseNodeProps) {
   return (
     <Card className="w-64 border-2">
-      {/* Input Handle: The circle on the left where connections arrive */}
       {isTarget && (
         <Handle
           type="target"
@@ -29,7 +37,6 @@ export function BaseNode({ title, icon: Icon, children, isSource, isTarget }) {
         </CardContent>
       )}
 
-      {/* Output Handle: The circle on the right where connections start */}
       {isSource && (
         <Handle
           type="source"

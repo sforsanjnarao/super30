@@ -11,7 +11,6 @@ After nodeExecutorService returns a result ({ status, outputData, error }), the 
 It logs the result by calling executionService.logStep(...).
 If the status was a success, it finds the next nodes to run and calls queue.service.ts to add new jobs for them.
 If the node failed or there are no more nodes, it calls executionService.finishExecution(...) to update the master Execution record to completed or failed.
-
 */
 
 import { error } from 'console';
@@ -25,15 +24,10 @@ import { finishExecution } from '../services/execution.service.ts';
 const consumer = kafka.consumer({ groupId: 'workflow-execution-group' });
 
 export const startWorker = async () => {
-    console.log("✅ Worker connecting...");
   await consumer.connect();
-     console.log("✅ Worker connected.");
 
-     console.log("✅ Subscribing...");
   await consumer.subscribe({ topic: 'node-execution-jobs', fromBeginning: true });
-  console.log('✅ Worker started and subscribed to "node-execution-jobs" topic.');
 
-  console.log("✅ Starting consumer...");
   await consumer.run({
     eachMessage: async ({ message }) => {
         if(message.value==null) throw error('no data found')
@@ -47,8 +41,8 @@ export const startWorker = async () => {
       
       try {
         const output = await executeNode(job);
-        console.log(output)
 
+        //putting it in the execution log
         await logStep(executionId, nodeId, inputData, output.result, 'success');
 
         const workflow = await getWorkflowForExecution(executionId);
@@ -89,8 +83,14 @@ const getWorkflowForExecution = async (executionId: string) => {
     return execution?.workflow;
 }
 
-const findNextNodes = (currentNodeId: string, connections: any): string[] => {
-  return connections[currentNodeId] || [];
+// const findNextNodes = (currentNodeId: string, connections: any): string[] => {
+//   return connections[currentNodeId] || [];
+// };
+
+const findNextNodes = (currentNodeId: string, connections: any[]): string[] => {
+  return connections
+    .filter(conn => conn.source === currentNodeId)
+    .map(conn => conn.target);
 };
 
 const logStep = async (executionId: string, nodeId: string, input: any, output: any, status: 'success' | 'failed') => {

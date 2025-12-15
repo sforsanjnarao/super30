@@ -3,9 +3,11 @@
 import { NODE_DEFINITIONS } from '@/lib/nodes/definitions';
 import { BaseNode } from './BaseNode';
 import { Badge } from '@/components/ui/badge';
-
+import { AppNode } from '@lib/types02';
+import { NodeProps } from '@xyflow/react';
+//TODO: webhook url with copy paste
 // A Webhook is a trigger node, so it ONLY has an output (source) handle.
-export default function WebhookNode({ data }) {
+export default function WebhookNode({ data }:NodeProps<AppNode>) {
   const definition = NODE_DEFINITIONS.find(def => def.type === 'webhookNode');
 
   return (

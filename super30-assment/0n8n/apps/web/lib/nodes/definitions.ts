@@ -1,35 +1,40 @@
 // This file will be the single source of truth for all available nodes.
 
-import TelegramNode from '@/components/workflow/nodes/TelegramNode'; // Placeholder for custom node UI
-import WebhookNode from '@/components/workflow/nodes/WebhookNode'; // Placeholder for custom node UI
-import { BrainCircuit, GitMerge, MessageCircle, Webhook } from 'lucide-react'; // Example icons
-import AgentNode from '@/components/workflow/nodes/AgentNode'; // <-- Add this
+import TelegramNode from '@/components/workflow/nodes/TelegramNode'; 
+import WebhookNode from '@/components/workflow/nodes/WebhookNode';
+import { BrainCircuit, GitMerge, MessageCircle, Webhook } from 'lucide-react';
+import AgentNode from '@/components/workflow/nodes/AgentNode';
 import IfNode from '@/components/workflow/nodes/IfNode';  
+import { NodeDefinitions } from '@lib/types02';
 
-export const NODE_DEFINITIONS = [
+export const NODE_DEFINITIONS: NodeDefinitions[] = [
   {
     type: 'webhookNode',
+    kind:'trigger',
     name: 'Webhook',
     description: 'Triggers the workflow when a webhook is called.',
     icon: Webhook,
-    customComponent: WebhookNode, // Make sure this points to your new component
+    customComponent: WebhookNode, 
   },
   {
-    type: 'Telegram',
+    kind:'action',
+    type: 'telegramNode',
     name: 'Telegram',
     description: 'Sends a message from a Telegram Bot.',
     icon: MessageCircle,
-    customComponent: TelegramNode, // Make sure this points to your new component
+    customComponent: TelegramNode, 
   },
   {
+    kind:'action',
     type: 'If', // <-- CRITICAL: This 'type' MUST match the backend ('If')
     name: 'Condition: If',
     description: 'Branches the workflow based on a condition.',
     icon: GitMerge,
-    customComponent: IfNode,
+    customComponent: IfNode, // Make sure this points to your new component
   },
   {
-    type: 'Agent', // <-- CRITICAL: This 'type' MUST match the backend ('Agent')
+    kind:'action',
+    type: 'Agent',
     name: 'AI Agent',
     description: 'Processes data with an AI model.',
     icon: BrainCircuit,
@@ -41,9 +46,10 @@ export const NODE_DEFINITIONS = [
 ];
 
 
+
 // Create a map of node types to their components for React Flow
 export const getNodeTypes = () => {
-  const nodeTypes = {};
+  const nodeTypes:Record<string, React.ComponentType<any>> = {};
   NODE_DEFINITIONS.forEach(def => {
     nodeTypes[def.type] = def.customComponent;
   });

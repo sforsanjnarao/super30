@@ -1,11 +1,6 @@
 "use strict";
-// import {WebSocket, WebSocketServer} from 'ws'
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.gameManager = void 0;
-const logger_1 = require("./logger");
-const store_1 = require("./store");
-exports.gameManager = new store_1.GameManager();
-(0, logger_1.logger)();
+const PubSubManager_1 = require("./PubSubManager");
 setInterval(() => {
-    exports.gameManager.addGame(Math.random().toString());
-}, 1000);
+    PubSubManager_1.PubSubManager.getInstance().Subscriber(Math.random().toString(), 'apple');
+}, 3000);

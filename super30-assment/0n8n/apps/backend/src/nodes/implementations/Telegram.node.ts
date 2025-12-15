@@ -10,9 +10,7 @@ export class TelegramNode implements INode {
     }
     try{
       const chatId = parameters.chatId;
-      console.log('chatId:',chatId)
       const text = this.resolveTemplate(parameters.text, inputData); // Use templating
-      console.log('credentials.botToken:',credentials.botToken)
       const url = `https://api.telegram.org/bot${credentials.botToken}/sendMessage`;
       const response = await axios.post(url, {
         chat_id: chatId,

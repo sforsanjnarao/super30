@@ -1,5 +1,4 @@
 import Router, { type Request, type Response } from "express";
-import { protect } from "../middleware/routesProtect.ts";
 import { handleWebhook } from "../controller/webhook.controller.ts";
 
 

@@ -25,7 +25,7 @@
 // );
 import WorkflowEditorWrapper from '@/components/workflow/WorkflowEditorWrapper';
 
-export default async function WorkflowEditorPage({ params }: any) {
+export default async function WorkflowEditorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
   return (

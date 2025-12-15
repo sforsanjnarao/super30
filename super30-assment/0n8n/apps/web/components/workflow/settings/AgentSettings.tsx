@@ -3,21 +3,21 @@
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Credential } from "@/app/(app)/credentials/page";
+import { SettingsFormProps } from "../SettingsPanel";
 
-interface AgentSettingsProps {
-  nodeData: {
-    parameters?: {
-      model?: string;
-      prompt?: string;
-    };
-    credentialsId?: string;
-  };
-  onUpdate: (data: object) => void;
-  credentials: Credential[];
-}
+// interface AgentSettingsProps {
+//   nodeData: {
+//     parameters?: {
+//       model?: string;
+//       prompt?: string;
+//     };
+//     credentialsId?: string;
+//   };
+//   onUpdate: (data: object) => void;
+//   credentials: Credential[];
+// }
 
-export function AgentSettings({ nodeData, onUpdate, credentials }: AgentSettingsProps) {
+export function AgentSettings({ nodeData, onUpdate, credentials }:SettingsFormProps) {
   
   const handleParamChange = (paramName: string, value: string) => {
     onUpdate({
@@ -29,7 +29,7 @@ export function AgentSettings({ nodeData, onUpdate, credentials }: AgentSettings
   };
 
   const handleCredentialChange = (credentialId: string) => {
-     onUpdate({ credentialsId: credentialId });
+     onUpdate({ credentialId: credentialId });
   };
 
   return (
@@ -37,7 +37,7 @@ export function AgentSettings({ nodeData, onUpdate, credentials }: AgentSettings
       <div className="space-y-2">
         <Label>Credential</Label>
         <Select
-          value={nodeData.credentialsId}
+          value={nodeData.credentialId}
           onValueChange={handleCredentialChange}
         >
           <SelectTrigger>

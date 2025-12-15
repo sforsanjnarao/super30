@@ -27,7 +27,7 @@ async function startServer(){
         await client.connect()
         console.log('redis client is connected')
 
-        app.listen(3000,()=>{
+        app.listen(3001,()=>{
             console.log('app is listing on port 3000')
         })
    }catch(error){

@@ -20,15 +20,13 @@ import "@xyflow/react/dist/style.css";
 import axios from 'axios';
 import { toast } from 'sonner';
 import { SettingsPanel } from './SettingsPanel'; 
-
-
-// Import UI components
 import { Button } from '@/components/ui/button';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Save, Play } from 'lucide-react';
-import { Sidebar } from './Sidebar'; // Your existing sidebar
+import { Sidebar } from './Sidebar';
 import { getNodeTypes, NODE_DEFINITIONS } from '@/lib/nodes/definitions';
+import { AppNode, metaData, NodeDefinitions, WorkflowResponse } from '@lib/types02';
 // import TelegramNode from '../../app/(app)/workflows/_component/nodes/TelegramNode';
 // import WebhookNode from '../../app/(app)/workflows/_component/nodes/WebhookNode';
 
@@ -67,90 +65,21 @@ const EditorTopBar = ({ onSave, onStatusChange, isActive, workflowName }:any) =>
 };
 
 
-// --- The Main Editor Component ---
-// This is your 'Environment' and 'FlowCanvas' logic combined and cleaned up.
 export function WorkflowEditor({ workflowId }: { workflowId: string }) {
     const reactFlowWrapper = useRef<HTMLDivElement>(null);
     const { screenToFlowPosition } = useReactFlow();
 
-    // State Management
-    const [workflowName, setWorkflowName] = useState("Loading...");
-    const [nodes, setNodes] = useState<Node[]>([]);
+    const [workflowName, setWorkflowName] = useState("");
+    const [nodes, setNodes] = useState<AppNode[]>([]);
     const [edges, setEdges] = useState<Edge[]>([]);
     const [isWorkflowActive, setIsWorkflowActive] = useState(false);
     const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
+ 
 
-    // interface workflowdata{
-    //     name:string,
-    //     nodes: NodeData[],
-    //     connections: ConnectionData[],
-    //     active: boolean
-    // }
-    // interface ConnectionType {
-    //     source: string;
-    //     target: string;
-    //     [key: string]: any;
-    //     }
 
-    // interface NodeData {
-    //     id: string;
-    //     type: string;
-    //     parameters?: Record<string, any>;
-    //     credentialsId?: string;
-    //     position?: { x: number; y: number };
-    // }
 
-    // interface ConnectionData {
-    //     id: string;
-    //     source: string;
-    //     target: string;
-    // }
-
-    // For position of each node
-type Position = {
-  x: number;
-  y: number;
-};
-
-// For the data field inside each node
-type NodeData = {
-  label: string;
-  parameters: Record<string, any>; // flexible key-value params
-};
-
-// For each node in the workflow
- type WorkflowNodes = {
-  id: string;
-  type: string;
-  position: Position;
-  data: NodeData;
-  measured?: {
-    width: number;
-    height: number;
-  };
-};
-
-// For connections between nodes (edges)
- type ConnectionType = {
-  source: string;
-  target: string;
-  id: string;
-};
-
-// Full workflow type from backend
- type WorkflowResponse = {
-  id: string;
-  name: string;
-  authorId: string;
-  webhookId: string | null;
-  active: boolean;
-  nodes: WorkflowNodes[];
-  connections: ConnectionType[];
-  createdAt: string;
-  updatedAt: string;
-};
-    // Fetch initial workflow data
+ 
     useEffect(() => {
         const fetchWorkflow = async () => {
             try {
@@ -162,10 +91,15 @@ type NodeData = {
                 setWorkflowName(name);
                 // Your backend connections might not be in React Flow's edge format.
                 // It's safer to transform them here.
-                const flowEdges = connections.map((c:ConnectionType) => ({...c, id: `e-${c.source}-${c.target}`}));
+                const flowEdges = connections.map((c) => ({...c, id: `e-${c.source}-${c.target}`}));
+                // const flowNodes = (nodes || []).map((n: any) => ({
+                //     ...n,
+                //     // Ensure 'data' exists so React Flow doesn't crash
+                //     data: n.data || { label: '', parameters: {} }
+                // })) as AppNode[];
 
                 setNodes(nodes || []);
-                setEdges(flowEdges || []);
+                setEdges(flowEdges );
                 setIsWorkflowActive(active);
                 toast.success("Workflow loaded.");
             } catch (error) {
@@ -177,8 +111,8 @@ type NodeData = {
     }, [workflowId]);
 
     // React Flow Handlers
-    const onNodesChange: OnNodesChange = useCallback((changes) => setNodes((nds) => applyNodeChanges(changes, nds)), [setNodes]);
-    const onEdgesChange: OnEdgesChange = useCallback((changes) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
+    const onNodesChange:OnNodesChange<AppNode> = useCallback((changes) => setNodes((oldNode) => applyNodeChanges(changes, oldNode) as AppNode[]), [setNodes]);
+    const onEdgesChange: OnEdgesChange<Edge> = useCallback((changes) => setEdges((eds) => applyEdgeChanges(changes, eds)), [setEdges]);
     const onConnect: OnConnect = useCallback((params: Connection) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
     const onNodeClick: NodeMouseHandler = useCallback((event, node) => {
         setSelectedNodeId(node.id);
@@ -187,23 +121,12 @@ type NodeData = {
     const clearSelectedNode = () => {
         setSelectedNodeId(null);
     };
-         interface WorkflowNodeData {
-        parameters: Record<string, any>;  // e.g. { prompt: "capital of india?" }
-        credentialsId?: string;
-        }
+        
 
-        interface WorkflowNode {
-        id: string;
-        type: string; // e.g. "Agent" | "Telegram"
-        position: {
-            x: number;
-            y: number;
-        };
-        data: WorkflowNodeData;
-    }
+       
     
 
-    const updateNodeData = useCallback((nodeId: string, newData:Partial<WorkflowNodeData>) => {
+    const updateNodeData = useCallback((nodeId: string, newData:Partial<metaData>) => {
         setNodes((nds) => 
             nds.map((node) => {
                 if (node.id === nodeId) {
@@ -233,13 +156,14 @@ type NodeData = {
         const type = event.dataTransfer.getData('application/reactflow');
         if (!type) return;
 
-        const definition = NODE_DEFINITIONS.find(def => def.type === type);
+        const definition  = NODE_DEFINITIONS.find(def => def.type === type);
         if (!definition) return;
 
 
         const position = screenToFlowPosition({ x: event.clientX, y: event.clientY });
-       const newNode: Node = {
+        const newNode: AppNode = {
             id: `dnd-node-${Math.random()}`,
+            kind:definition.kind,
             type,
             position,
             data: { 
@@ -333,8 +257,8 @@ type NodeData = {
                         </ReactFlow>
                     </div>
                     <SettingsPanel
-                        selectedNodeId={selectedNodeId}
-                        nodes={nodes}
+                        selectedNodeId={selectedNodeId} //state
+                        nodes={nodes} //state
                         onClose={clearSelectedNode}
                         onUpdateNodeData={updateNodeData}
                     />

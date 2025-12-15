@@ -46,41 +46,34 @@ export const executeNode = async (job: { executionId: string, nodeId: string, in
   if (!execution || !execution.workflow) {
     throw new Error(`Execution or workflow not found for executionId: ${executionId}`);
   }
-  console.log(execution.workflow)
   const { workflow } = execution;
   
   // 2. Find the specific node's configuration from the workflow blueprint
   const nodeConfig = (workflow.nodes as any).find((n: any) => n.id === nodeId);
-  console.log("nodeConfig",nodeConfig)
   if (!nodeConfig) {
     throw new Error(`Node with ID ${nodeId} not found in workflow definition.`);
   }
 
   // 3. Find the correct node logic implementation from our registry
   const nodeImplementation = nodeImplementations[nodeConfig.type];
-  console.log("nodeImplementation",nodeImplementation)
   if (!nodeImplementation) {
     throw new Error(`Execution logic for node type "${nodeConfig.type}" is not implemented.`);
   }
 
   // 4. Fetch and decrypt credentials if the node requires them
   let credentials:ICredentials | undefined;
-  console.log('workflow.authorId',workflow.authorId)
+  
   if (nodeConfig.credentialsId) {
-    console.log('why not')
     credentials = await getAndDecryptCredential(nodeConfig.credentialsId, workflow.authorId) as  ICredentials
   }
-  console.log('nodeConfig.credentialsId',nodeConfig.credentialsId)
-  console.log('lalal',credentials)
+ 
   
   const nodeInput: INodeInput = {
-    parameters: nodeConfig.parameters,
+    parameters: nodeConfig.parameters, //nodeConfig.data.parameters
     inputData: inputData,
     ...(credentials ? {credentials}:{})
     
   };
-  console.log('nodeInput',nodeInput)
-
   // 5. Execute the node's logic and return the output
   return nodeImplementation.execute(nodeInput);
 };

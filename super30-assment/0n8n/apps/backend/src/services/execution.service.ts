@@ -19,6 +19,7 @@ import type { WebhookData } from '../controller/webhook.controller.ts';
 export interface NodeData {
   id: string;
   type: string;
+  kind:string; //----
   parameters?: Record<string, any>;
   credentialsId?: string;
   position?: { x: number; y: number };
