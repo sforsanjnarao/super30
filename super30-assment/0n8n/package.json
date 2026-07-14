@@ -1,5 +1,5 @@
 {
-  "name": "0n8n",
+  "name": "my-turborepo",
   "private": true,
   "scripts": {
     "build": "turbo run build",
@@ -9,22 +9,16 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "@cspell/cspell-bundled-dicts": "^9.2.1",
     "prettier": "^3.6.2",
     "turbo": "^2.5.6",
-    "typescript": "^5.9.2"
+    "typescript": "5.9.2"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@11.2.0",
+  "packageManager": "npm@10.9.2",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "kafkajs": "^2.2.4",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0"
-  }
+  ]
 }

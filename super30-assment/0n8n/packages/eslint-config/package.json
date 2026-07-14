@@ -6,10 +6,7 @@
   "exports": {
     "./base": "./base.js",
     "./next-js": "./next.js",
-    "./react-internal": "./react-internal.js",
-    ".button": "./src/button.tsx",
-    ".card": "./src/card.tsx",
-    ".code": "./src/code.tsx"
+    "./react-internal": "./react-internal.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.34.0",

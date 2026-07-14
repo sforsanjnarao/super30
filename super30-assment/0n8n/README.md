@@ -1,28 +1,134 @@
-sequenceDiagram
-    participant External as User/Webhook
-    participant API as API Server
-    participant Kafka as Queue
-    participant Worker as Background Worker
-    participant DB as Database
 
-    Note over External, DB: STEP 1: TRIGGER
-    External->>API: Hits Webhook URL
-    API->>DB: Create "Running" Status
-    API->>Kafka: Add Job #1 (Start Node)
-    API-->>External: Respond "OK" (Connection Closed)
+# Autm8n — Visual Workflow Automation with AI and Integrations
 
-    Note over External, DB: STEP 2: EXECUTION A
-    Worker->>Kafka: Picks up Job #1
-    Worker->>Worker: Runs Logic (e.g., AI)
-    Worker->>DB: Check: Who is next?
-    DB-->>Worker: "Node B is next"
-    Worker->>Kafka: Add Job #2 (Node B) using Output of A
+Autm8n is a lightweight open-source automation tool inspired by n8n and Zapier. It allows users to visually create workflow automations using triggers, actions, and AI agents, without writing backend code. Workflows can trigger webhooks, send Telegram messages, send Gmail emails, or generate responses using AI.
 
-    Note over External, DB: STEP 3: EXECUTION B
-    Worker->>Kafka: Picks up Job #2
-    Worker->>Worker: Runs Logic (e.g., Telegram)
-    Worker->>DB: Check: Who is next?
-    DB-->>Worker: "Nobody"
+The system supports stateful execution, response chaining between nodes, credential management per user, and webhook-based resume functionality.
 
-    Note over External, DB: STEP 4: FINISH
-    Worker->>DB: Mark Status "Completed"
+---
+
+## Features
+
+- Visual workflow builder using React Flow
+- Trigger-based execution (webhooks)
+- Telegram message action
+- Gmail email action
+- AI Agent response generation
+- User-specific credential storage
+- Node-to-node response passing
+- Real-time execution logs
+- Persistent response storage (PostgreSQL)
+- Deployable on AWS EC2 + Vercel
+
+---
+
+## Architecture Overview
+
+![Autm8n Architecture](./packages/assets/architecture.png)
+
+Workflows saved as JSON (nodes + connections)
+
+Executed on EC2 server using pre-order traversal
+
+Execution can pause on webhook triggers and resume later when webhook will be triggered
+
+Outputs persisted in responses table for chaining
+
+SSE for realtime updates from server
+
+
+---
+
+## Tech Stack
+
+| Area       | Technology                             |
+| ---------- | -------------------------------------- |
+| Frontend   | Next.js, TypeScript, React Flow        |
+| Backend    | Node.js, Express, TypeScript           |
+| Database   | PostgreSQL, Prisma                     |
+| Auth       | Token-based authentication             |
+| Deployment | Frontend on Vercel, Backend on AWS EC2 |
+| Logging    | Real-time streaming from server        |
+| AI         | Generative AI integration              |
+
+---
+
+## Node Types
+
+| Node            | Description                                                 |
+| --------------- | ----------------------------------------------------------- |
+| Trigger         | Initiates a workflow (webhook based)                        |
+| Telegram Action | Sends a Telegram message using saved credentials            |
+| Gmail Action    | Sends an email using stored user Gmail OAuth credentials    |
+| AI Agent        | Generates dynamic output which can be passed to other nodes |
+
+---
+
+## Setup Instructions
+
+### Clone the repository
+
+```
+git clone https://github.com/AmritHehe/n8n.git
+cd n8n
+```
+
+### Install dependencies
+
+```
+npm install
+```
+
+### Setup environment variables
+
+Create `.env` in:
+
+* `/apps/api`
+* `/apps/web`
+* `/packages/database`
+
+Required values:
+
+```
+
+packages/db
+DATABASE_URL="postgresql://..."
+
+apps/api
+JWT_SECRET="any_secret_value"
+GOOGLE_API_KEY="..."
+
+
+apps/web
+NEXT_PUBLIC_BACKEND_API ="YOUR_BACKEND_API_URL"
+```
+
+### Run locally
+
+```
+npm run dev
+```
+
+---
+
+## Security Notes
+
+* Credentials are stored per user and must not be logged.
+* Never commit environment variables.
+* All outbound execution must validate credentials before running.
+* Webhooks should be validated to prevent unauthorized triggers.
+
+---
+
+## Roadmap
+
+| Feature                           | Status   |
+| --------------------------------- | -------- |
+| Real-time Logs                    | Complete |
+| Webhook Resume                    | Complete |
+| AI Agent Node                     | Complete |
+| Node Validation Schema            | Planned  |
+| Retry per Node                    | Planned  |
+| Queue-based Worker System         | Planned  |
+| Multi-workflow Parallel Execution | Planned  |
+

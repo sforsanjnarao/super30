@@ -1,102 +1,153 @@
-// 'use client'
-// import React, { useState } from 'react'
-// import { useRouter } from 'next/navigation'
-// import api from '@lib/api'
+"use client"
+import { useState } from "react";
+import { AuthCard } from "../../components/auth";
+import { useRouter } from "next/navigation";    
+import { AuthButton } from "../../components/AuthButton";
+import {FormInput} from "../../components/FormInput"
+import Link from "next/link";
+import axios from "axios";
+import api from "../../libs/apiClient";
 
-// const SignupPage = () => {
-
-//     const router=useRouter()
-
-//   const [email, setEmail]=useState('')
-//   const [password, setPassword]=useState('')
-//   const [name, setName]=useState('')
-
-//   type Event= React.FormEvent<HTMLFormElement>
-//   const handelFormSubmit= async (e:Event)=>{
-//     e.preventDefault();
-//     const res=await api.post("/user/signup",{name:name,email:email, password: password},{
-//       withCredentials: true
-//     })
-//     setName('')
-//     setEmail('')
-//     setPassword('')
-//     if (res.status === 200) {
-//         router.push('/home');
-//       } else {
-//         console.log("Login failed:", res.data);
-//       }
-//   }
-//   return (
-//     <div>
-//       <form onSubmit={handelFormSubmit}>
-//       <label htmlFor="email">name</label>
-//       <input type="text" placeholder='your name' id='name' onChange={(e)=>setName(e.target.value)} value={name}/>
-//         <label htmlFor="email">Email</label>
-//         <input type="text" placeholder='sanjna@gmail.com' id='email' onChange={(e)=>setEmail(e.target.value)} value={email}/>
-//         <label htmlFor="email">password</label>
-//         <input type="text" placeholder='sanjna@gmail.com' id='password' onChange={(e)=>setPassword(e.target.value)} value={password}/>
-//         <button type='submit'>submit</button>
-//       </form>
-//     </div>
-//   )
-// }
-
-// export default SignupPage
-
-
-
-
-
-
-
-
-
-'use client';
-
-import { AuthForm } from '@components/auth/AuthForm';
-import { toast } from "sonner"; 
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/auth.store';
-import axios from 'axios'; 
-
-export default function SignUpPage() {
+export default function  SignUp () {
   const router = useRouter();
-  const { setUser } = useAuthStore(); 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<{ 
+    email?: string; 
+    password?: string; 
+    confirmPassword?: string 
+  }>({});
+  const [loading, setLoading] = useState(false);
+//   const { toast } = useToast();
 
-  interface SignUpResponse {
-  user: {
-    id: string;
-    name: string;
-    email: string;
+  const validateForm = () => {
+    const newErrors: { 
+      email?: string; 
+      password?: string; 
+      confirmPassword?: string 
+    } = {};
+    
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+      newErrors.password = "Password must contain uppercase, lowercase, and number";
+    }
+    
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password";
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
-  message: string;
-}
-  const handleSignUp = async (values:any) => {
+
+  const handleSignUp = async () => {
+    if (!validateForm()) return;
+    
+    setLoading(true);
+    
     try {
-      const response = await axios.post<SignUpResponse>(
-        "http://localhost:8080/api/v0/user/signup",values,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,      
-        }
-      );
-      console.log(response)
+      const res = await api.post("/api/v1/signup", { 
+        name: email, 
+        pass: password
+      });
 
-      const data = response.data
+      console.log("response"+ res);
 
-      console.log(data)
+      router.push("/signin");  
 
-      // On success, update the global state with the user info
-      setUser(data.user); 
-      toast.success("Account created successfully!");
-      router.push('/dashboard'); // Redirect to the protected dashboard
-    } catch (error:any) {
-      console.log(error)
-      // toast.error(error.message);
+    } catch (err) {
+      console.error("Signup failed:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  return <AuthForm isSignUp={true} onSubmit={handleSignUp} />;
-}
+  return (
+    <AuthCard 
+      title="Create your account" 
+      subtitle="Join thousands of users automating their workflows"
+    >
+      <form 
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSignUp();
+        }}
+        className="space-y-6"
+      >
+        <FormInput
+          type="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={setEmail}
+          error={errors.email}
+          required
+        />
+        
+        <FormInput
+          type="password"
+          placeholder="Create a password"
+          value={password}
+          onChange={setPassword}
+          error={errors.password}
+          required
+        />
+        
+        <FormInput
+          type="password"
+          placeholder="Confirm your password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+          error={errors.confirmPassword}
+          required
+        />
+        
+        <div className="text-sm">
+          <label className="flex items-start gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              required
+              className="w-4 h-4 mt-0.5 rounded border-input-border bg-input focus:ring-2 focus:ring-primary/20 text-primary transition-colors"
+            />
+            <span className="text-foreground-secondary leading-relaxed">
+              I agree to the{" "}
+              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a href="#" className="text-primary hover:text-primary-hover transition-colors">
+                Privacy Policy
+              </a>
+            </span>
+          </label>
+        </div>
+        
+        <AuthButton onClick={handleSignUp} loading={loading}>
+          Create Account
+        </AuthButton>
+        
+        <div className="text-center">
+          <span className="text-foreground-secondary">Already have an account? </span>
+          <Link 
+            href="/signin" 
+            className="text-primary hover:text-primary-hover transition-colors font-medium"
+          >
+            Sign in
+          </Link>
+        </div>
+      </form>
+    </AuthCard>
+  );
+};
+
