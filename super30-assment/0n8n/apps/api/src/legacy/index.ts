@@ -9,6 +9,7 @@ import cors from 'cors';
 import { executeIt } from '../legacy/ExecuteEngine.js';
 import bcrypt from "bcrypt";
 import { encryptJSON , safeDecrypt } from '../utils/crypto.js';
+import { CLIENT_RENEG_LIMIT } from 'tls';
 
 const app  = express() ; 
 app.use(express.json()); 
@@ -59,6 +60,7 @@ app.post('/api/v1/signin' ,async (req : Request, res :Response)=> {
 
     if(user) {
         const checkPass = await bcrypt.compare( pass , user.pass )
+        console.log('checkPass',checkPass)
         
             if(checkPass || user.pass == pass){ 
                 const token  = jwt.sign({ 

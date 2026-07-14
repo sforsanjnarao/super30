@@ -39,14 +39,19 @@ export default function WorkflowsPage() {
     const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
     useEffect(() => {
+        console.log('lalal')
         const token = localStorage.getItem("token");
+        console.log('token', token)
         if (!token) redirect("/signin");
+
         fetchWorkflows();
     }, []);
 
     const fetchWorkflows = async () => {
         try {
+            console.log('fetchWorkflows')
             const response = await api.get("/workflow");
+            console.log('res', response)
             setWorkflows(Array.isArray(response.data) ? response.data : []);
         } catch (error) {
             console.error("Failed to fetch workflows:", error);

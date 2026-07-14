@@ -32,7 +32,7 @@ export default function LandingPage() {
                 </div>
                 <div className="flex items-center gap-5">
                     <a
-                        href="https://github.com/amrithehe/n8n"
+                        href="https://github.com/sforsanjnarao/super30/tree/main/super30-assment/0n8n"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1.5 text-[13px] text-white/30 hover:text-white/60 transition-colors"

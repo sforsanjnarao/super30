@@ -44,6 +44,7 @@ export default function SignIn() {
      setLoading(true);
     
     try {
+      console.log('hitted the endpoint from frontend ')
       const res = await api.post("/api/v1/signin", { 
         name: email, 
         pass: password
