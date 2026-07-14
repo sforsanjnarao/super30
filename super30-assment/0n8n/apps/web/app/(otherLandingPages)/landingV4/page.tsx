@@ -241,7 +241,7 @@ export default function LandingV4() {
                             <div className="w-7 h-7 rounded-full bg-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                                 <Image src="/workflow.svg" alt="" width={13} height={13} className="invert" />
                             </div>
-                            <span className="font-ed text-[15px] italic text-white/80 tracking-tight">autm8n</span>
+                            <span className="font-ed text-[15px] italic text-white/80 tracking-tight">workfloww</span>
                         </Link>
 
                         <div className="hidden md:flex items-center gap-4">
@@ -280,7 +280,7 @@ export default function LandingV4() {
                 {/* Open source pill */}
                 <div className="mb-12 opacity-0 animate-[fadeIn_0.6s_0.2s_forwards]">
                     <Link
-                        href="https://github.com/amrithehe/n8n"
+                        href="https://github.com/sforsanjnarao/super30/tree/main/super30-assment/0n8n"
                         target="_blank"
                         className="group inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/6 text-[11px] uppercase tracking-[0.2em] text-white/25 hover:text-white/50 hover:border-white/12 transition-all duration-300"
                     >
@@ -481,7 +481,7 @@ export default function LandingV4() {
                                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                                 </button>
                                 <Link
-                                    href="https://github.com/amrithehe/n8n"
+                                    href="https://github.com/sforsanjnarao/super30/tree/main/super30-assment/0n8n"
                                     target="_blank"
                                     className="group flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-[#08080c] text-[13px] font-medium hover:bg-blue-100 transition-colors duration-300"
                                 >
@@ -498,7 +498,7 @@ export default function LandingV4() {
                             {/* Watermark */}
                             <div className="text-center select-none mb-12 overflow-hidden">
                                 <h2 className="font-ed italic text-[clamp(5rem,20vw,14rem)] font-light tracking-tight leading-none text-white/2">
-                                    autm8n
+                                    workfloww
                                 </h2>
                             </div>
 
@@ -509,22 +509,25 @@ export default function LandingV4() {
                                     <div className="w-5 h-5 rounded-full bg-blue-400 flex items-center justify-center">
                                         <Image src="/workflow.svg" alt="" width={10} height={10} className="invert" />
                                     </div>
-                                    <span className="font-ed italic text-white/25 text-[13px]">autm8n</span>
+                                    <span className="font-ed italic text-white/25 text-[13px]">workfloww</span>
                                 </div>
 
                                 <div className="flex items-center gap-6">
-                                    <Link href="https://github.com/amrithehe/n8n" target="_blank" className="hover:text-white/35 transition-colors">
+                                    <Link href="https://github.com/sforsanjnarao/super30/tree/main/super30-assment/0n8n" target="_blank" className="hover:text-white/35 transition-colors">
                                         GitHub
                                     </Link>
-                                    <Link href="https://github.com/amrithehe" target="_blank" className="hover:text-white/35 transition-colors">
-                                        @amrithehe
+                                    <Link href="https://x.com/bitshitfalse" target="_blank" className="hover:text-white/35 transition-colors">
+                                        @bitshitfalse
+                                    </Link>
+                                    <Link href="https://www.linkedin.com/in/sforsanjnarao/" target="_blank" className="hover:text-white/35 transition-colors">
+                                        LinkedIn
                                     </Link>
                                 </div>
 
                                 <p className="text-[11px]">
-                                    © 2025 autm8n · built by{" "}
-                                    <Link href="https://github.com/amrithehe" target="_blank" className="text-white/25 hover:text-white/40 transition-colors">
-                                        amrit
+                                    © 2026 workfloww · built by{" "}
+                                    <Link href="https://github.com/sforsanjnarao" target="_blank" className="text-white/25 hover:text-white/40 transition-colors">
+                                        Sanjana
                                     </Link>
                                 </p>
                             </div>

@@ -28,7 +28,7 @@ export default function LandingPage() {
             <nav className="relative z-10 flex items-center justify-between px-8 py-5">
                 <div className="flex items-center gap-2">
 
-                    <span className="text-[14px] font-medium text-white/60 tracking-tight">AUTM8N</span>
+                    <span className="text-[14px] font-medium text-white/60 tracking-tight">WORKFLOWW</span>
                 </div>
                 <div className="flex items-center gap-5">
                     <a

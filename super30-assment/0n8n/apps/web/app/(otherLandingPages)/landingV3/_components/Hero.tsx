@@ -160,7 +160,7 @@ export default function Hero() {
                         </span>
                     </button>
                     <Link
-                        href="https://github.com/amrithehe/n8n"
+                        href="https://github.com/sforsanjnarao/super30/tree/main/super30-assment/0n8n"
                         target="_blank"
                         className="group relative p-4 bg-white/5 hover:bg-white/10 rounded-full font-medium text-sm border border-white/10 backdrop-blur-xl transition-all flex items-center justify-center overflow-hidden"
                     >

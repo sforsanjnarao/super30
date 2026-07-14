@@ -13,41 +13,43 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Autm8n — Node Based Automation",
+  metadataBase: new URL("https://workfloww.bitshitfalse.com"),
+  title: "Workfloww — Node Based Automation",
   description:
     "Build complex workflows in minutes",
   keywords: [
     "automation",
     "workflow",
     "node-based",
-    "n8n",
-    "mini n8n",
     "productivity",
     "integration",
-    "Autm8n",
+    "Workfloww",
   ],
-  authors: [{ name: "Amrit" }],
+  authors: [{ name: "Sanjana Kumari", url: "https://github.com/sforsanjnarao" }],
+  creator: "Sanjana Kumari",
   openGraph: {
-    title: "Autm8n — Build, Automate, Scale",
+    title: "Workfloww — Build, Automate, Scale",
     description:
       "Your go-to node-based automation platform. Connect your apps, automate your workflows, and scale your productivity with ease.",
-    siteName: "Autm8n",
+    siteName: "Workfloww",
     type: "website",
-    url: "https://autm8n.com",
+    url: "https://workfloww.bitshitfalse.com",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Autm8n — Node Based Automation Platform",
+        alt: "Workfloww — Node Based Automation Platform",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Autm8n — Node Based Automation",
+    site: "@bitshitfalse",
+    creator: "@bitshitfalse",
+    title: "Workfloww — Node Based Automation",
     description: "Connect your apps, automate your workflows, and scale your productivity with ease.",
-    images: ["https://autm8n.com/og-image.png"],
+    images: ["/og-image.png"],
   },
   other: {
     "theme-color": "#030303",

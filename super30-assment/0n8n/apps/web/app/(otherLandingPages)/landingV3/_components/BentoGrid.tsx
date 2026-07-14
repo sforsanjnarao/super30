@@ -92,7 +92,7 @@ export default function BentoGrid() {
 
             <div className="container mx-auto px-4 relative z-10">
                 <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-                    <p className="text-sm font-medium text-blue-400 uppercase tracking-widest mb-3">Why Autm8n</p>
+                    <p className="text-sm font-medium text-blue-400 uppercase tracking-widest mb-3">Why Workfloww</p>
                     <h2 className="text-4xl md:text-6xl font-bold text-white mb-5 tracking-tight">
                         Built for <span className="bg-linear-to-r from-blue-300 to-blue-400 bg-clip-text text-transparent">real workflows</span>
                     </h2>
@@ -121,7 +121,7 @@ export default function BentoGrid() {
                             <div className="flex items-center gap-2">
                                 <span className="text-blue-400/80">Waiting for approval...</span>
                             </div>
-                            <div className="text-white/30 font-mono">→ email sent to amritbx@gmail.com</div>
+                            <div className="text-white/30 font-mono">→ email sent to sanjnarao26@gmail.com</div>
                         </div>
                     </BentoItem>
 

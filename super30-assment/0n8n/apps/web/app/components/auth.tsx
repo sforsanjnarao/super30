@@ -28,7 +28,7 @@ export const AuthCard = ({ children, title, subtitle }: AuthCardProps) => {
                 className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center relative overflow-hidden"
                 style={{ background: 'var(--gradient-primary)' }}
               >
-                {/* n8n-style workflow icon */}
+                {/* workflow icon */}
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"

@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 
 // Comma-separated list of allowed browser origins, e.g.
-// CORS_ORIGINS="http://localhost:3000,https://autm8n.vercel.app"
+// CORS_ORIGINS="http://localhost:3000,https://workfloww.bitshitfalse.com"
 const allowedOrigins = (process.env.CORS_ORIGINS ?? "http://localhost:3000")
     .split(",")
     .map((o) => o.trim())

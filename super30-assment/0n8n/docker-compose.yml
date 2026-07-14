@@ -1,22 +1,22 @@
 services:
   postgres:
     image: postgres:16
-    container_name: autm8n-pg
+    container_name: workfloww-pg
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: autm8n
+      POSTGRES_DB: workfloww
     # 5433 on the host: 5432 is commonly already taken by another local Postgres.
     ports:
       - "5433:5432"
     volumes:
-      - autm8n-pgdata:/var/lib/postgresql/data
+      - workfloww-pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d autm8n"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d workfloww"]
       interval: 5s
       timeout: 5s
       retries: 10
 
 volumes:
-  autm8n-pgdata:
+  workfloww-pgdata:

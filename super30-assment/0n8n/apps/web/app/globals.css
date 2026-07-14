@@ -42,8 +42,8 @@
 
 @layer base {
   :root {
-    /* n8n Dark Theme - Authentic Brand Colors */
-    --primary: 14 100% 57%;        /* n8n signature orange-red */
+    /* Workfloww dark theme */
+    --primary: 14 100% 57%;        /* signature orange-red */
     --primary-hover: 14 100% 62%;   /* lighter on hover */
     --primary-dark: 14 100% 52%;    /* darker variant */
     --secondary: 25 100% 50%;       /* complementary orange */

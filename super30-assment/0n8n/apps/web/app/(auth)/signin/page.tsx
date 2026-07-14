@@ -66,7 +66,7 @@ export default function SignIn() {
   return (
     <AuthCard 
       title="Welcome back" 
-      subtitle="Sign in to your n8n account to continue"
+      subtitle="Sign in to your Workfloww account to continue"
     >
       <form 
         onSubmit={(e) => {

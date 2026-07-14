@@ -13,10 +13,10 @@ export default async function ExecuteGmail(proces : node , logCallBack : any , w
             return;
         }
         if(!message ||  message.length == 0){
-            message = "FOLLOW_AMRITHEHE_ON_X_&_GITHUB"
+            message = "This message was sent by a Workfloww automation."
         }
         if(!subject ||  subject.length == 0){
-            subject = "FOLLOW_AMRITHEHE_ON_X_&_GITHUB"
+            subject = "Workfloww notification"
         }
         try{ 
 
